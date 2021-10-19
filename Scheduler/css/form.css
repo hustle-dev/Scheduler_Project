@@ -59,13 +59,20 @@ body {
 
 .input-container {
   position: relative;
-  margin-bottom: 35px;
+  /* margin-top: 35px;
+  margin-bottom: 35px; */
+  margin: 55px 0 35px;
 }
 
 .input-container label {
   font-size: 1.25rem;
   font-weight: 500;
   color: var(--sub-text-color);
+}
+
+#signin-password,
+#signup-password {
+  font-size: 3.6rem;
 }
 
 .input-container input {
@@ -142,11 +149,11 @@ body {
   color: var(--error-color);
 }
 
-.input-container .error {
+.input-container .error-message {
   position: absolute;
   top: 120%;
   left: 0.4rem;
-  font-size: 0.8rem;
+  font-size: 0.875rem;
   color: var(--error-color);
 }
 
