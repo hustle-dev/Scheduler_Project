@@ -2,14 +2,12 @@
 
 :root {
   --background-color: #fff;
-  --main-color: #909090;
-  --label-color: #d6d6d6;
+  --main-text-color: #909090;
+  --sub-text-color: #d6d6d6;
   --font-color: #000000de;
   --active-color: #1c32ff;
-  --red: #ed2553;
-  --blue: #2196f3;
-  --green: #56ff85;
-  --gray: #757575;
+  --success-color: #56ff85;
+  --error-color: #ed2553;
   --width: 460px;
   --trasition-delay: 0.4s;
 }
@@ -67,7 +65,7 @@ body {
 .input-container label {
   font-size: 1.25rem;
   font-weight: 500;
-  color: var(--label-color);
+  color: var(--sub-text-color);
 }
 
 .input-container input {
@@ -98,7 +96,7 @@ body {
   position: absolute;
   left: 0;
   bottom: 0;
-  background: var(--label-color);
+  background: var(--sub-text-color);
   width: 100%;
   height: 3px;
 }
@@ -137,11 +135,11 @@ body {
 }
 
 .input-container .icon.icon-success {
-  color: var(--green);
+  color: var(--success-color);
 }
 
 .input-container .icon.icon-fail {
-  color: var(--red);
+  color: var(--error-color);
 }
 
 .input-container .error {
@@ -149,7 +147,7 @@ body {
   top: 120%;
   left: 0.4rem;
   font-size: 0.8rem;
-  color: var(--red);
+  color: var(--error-color);
 }
 
 .button {
@@ -167,19 +165,19 @@ body {
 
 .button:disabled {
   background-color: transparent;
-  border: 3px solid var(--label-color);
-  color: var(--label-color);
+  border: 3px solid var(--sub-text-color);
+  color: var(--sub-text-color);
 }
 
 .link {
   margin: 20px 0 10px;
-  color: var(--label-color);
+  color: var(--sub-text-color);
   text-align: center;
   transition: var(--trasition-delay) ease;
 }
 
 .link > a:hover {
-  color: var(--main-color);
+  color: var(--main-text-color);
 }
 
 .hidden {
