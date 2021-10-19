@@ -7,6 +7,15 @@
 }
 
 :root {
+  --background-color: #fff;
+  --main-text-color: #909090;
+  --sub-text-color: #d6d6d6;
+  --font-color: #000000de;
+  --active-color: #1c32ff;
+  --success-color: #56ff85;
+  --error-color: #ed2553;
+  --width: 460px;
+  --trasition-delay: 0.4s;
 }
 
 body {
