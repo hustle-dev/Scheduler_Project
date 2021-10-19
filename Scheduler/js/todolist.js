@@ -37,6 +37,10 @@ const toggleTodoCompleted = id => {
   setTodo(todos.map(todo => (todo.id === +id ? { ...todo, completed: !todo.completed } : todo)));
 };
 
+const removeTodo = id => {
+  setTodo(todos.filter(todo => todo.id !== +id));
+};
+
 window.addEventListener('DOMContentLoaded', render);
 
 $newTodo.onkeyup = e => {
@@ -56,5 +60,5 @@ $todoList.onchange = e => {
 $todoList.onclick = e => {
   if (!e.target.classList.contains('destroy')) return;
 
-  console.log(e.target);
+  removeTodo(e.target.closest('li').dataset.id);
 };
