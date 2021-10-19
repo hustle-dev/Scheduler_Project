@@ -18,52 +18,8 @@
     />
     <link rel="stylesheet" href="./css/calendar.css" />
   </head>
+
   <body>
-    <span class="login-success-sign">손원재님, 안녕하세요</span>
-    <div class="calendar"></div>
-    <div
-      role="dialog"
-      id="dialog1"
-      aria-labelledby="dialog1_label"
-      aria-modal="true"
-      class="popup"
-    >
-      <h2>오늘의 할일</h2>
-      <div class="year-month">2021/10/19</div>
-
-      <input
-        type="text"
-        class="new-todo"
-        placeholder="할일을 작성해주세요."
-        autofocus
-      />
-
-      <ul class="todo-list">
-        <li data-id="3">
-          <div class="view">
-            <input type="checkbox" class="toggle" />
-            <label>영어 공부</label>
-            <button class="destroy"></button>
-          </div>
-        </li>
-        <li data-id="2">
-          <div class="view">
-            <input type="checkbox" class="toggle" />
-            <label>수학 공부</label>
-            <button class="destroy"></button>
-          </div>
-        </li>
-        <li data-id="1">
-          <div class="view">
-            <input type="checkbox" class="toggle" />
-            <label>국어 공부</label>
-            <button class="destroy"></button>
-          </div>
-        </li>
-      </ul>
-    </div>
-
-    <div class="overlay">하이</div>
     <p class="login-success-sign">손원재님, 안녕하세요</p>
     <div class="calendar">
       <h2 class="calendar-month">OCT <span> 2021</span></h2>
@@ -123,7 +79,36 @@
       <button class="move-prev-months">◀</button>
       <button class="move-next-months">▶</button>
     </div>
-    <!-- <div class="popup">오늘의 할일</div> -->
-    <!-- <div class="overlay">하이</div> -->
+    <!-- <div role="dialog" id="dialog1" aria-labelledby="dialog1_label" aria-modal="true" class="popup">
+    <h2>오늘의 할일</h2>
+    <div class="year-month">2021/10/19</div>
+
+    <input type="text" class="new-todo" placeholder="할일을 작성해주세요." autofocus />
+
+    <ul class="todo-list">
+      <li data-id="3">
+        <div class="view">
+          <input type="checkbox" class="toggle" />
+          <label>영어 공부</label>
+          <button class="destroy"></button>
+        </div>
+      </li>
+      <li data-id="2">
+        <div class="view">
+          <input type="checkbox" class="toggle" />
+          <label>수학 공부</label>
+          <button class="destroy"></button>
+        </div>
+      </li>
+      <li data-id="1">
+        <div class="view">
+          <input type="checkbox" class="toggle" />
+          <label>국어 공부</label>
+          <button class="destroy"></button>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div class="overlay">하이</div> -->
   </body>
 </html>
