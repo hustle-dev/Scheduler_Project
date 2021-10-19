@@ -1,11 +1,9 @@
-let todos = [
-  { id: 3, content: '알고리즘', completed: true },
-  { id: 2, content: '지식창고', completed: false },
-  { id: 1, content: 'TS공부', completed: false }
-];
+let todos = JSON.parse(localStorage.getItem('user')).abc.todolist['20211019'];
 
+const $popup = document.querySelector('.popup');
 const $newTodo = document.querySelector('.new-todo');
 const $todoList = document.querySelector('.todo-list');
+const $overlay = document.querySelector('.overlay');
 
 const render = () => {
   $todoList.innerHTML = todos
@@ -62,3 +60,10 @@ $todoList.onclick = e => {
 
   removeTodo(e.target.closest('li').dataset.id);
 };
+
+$overlay.onclick = () => {
+  $popup.style.display = 'none';
+  $overlay.style.display = 'none';
+};
+
+// console.log(JSON.parse(localStorage.getItem('user')).abc.todolist['20211019']);
