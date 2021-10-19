@@ -1,0 +1,28 @@
+{
+  "name": "Scheduler_Project",
+  "version": "1.0.0",
+  "description": "JavaScript Scheduler Project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hustle-dev/Scheduler_Project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hustle-dev/Scheduler_Project/issues"
+  },
+  "homepage": "https://github.com/hustle-dev/Scheduler_Project#readme",
+  "devDependencies": {
+    "eslint": "^7.0.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-html": "^6.2.0",
+    "eslint-plugin-import": "^2.25.2",
+    "prettier": "2.4.1"
+  }
+}
