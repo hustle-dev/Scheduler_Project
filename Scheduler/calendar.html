@@ -11,33 +11,19 @@
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;900&display=swap"
       rel="stylesheet"
     />
-    <link
-      href="https://unpkg.com/boxicons@latest/css/boxicons.min.css"
-      rel="stylesheet"
-    />
+    <link href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="./css/calendar.css" />
   </head>
   <body>
     <div class="calendar"></div>
-    <div
-      role="dialog"
-      id="dialog1"
-      aria-labelledby="dialog1_label"
-      aria-modal="true"
-      class="popup"
-    >
+    <div role="dialog" id="dialog1" aria-labelledby="dialog1_label" aria-modal="true" class="popup">
       <h2>오늘의 할일</h2>
       <div class="year-month">2021/10/19</div>
 
-      <input
-        type="text"
-        class="new-todo"
-        placeholder="할일을 작성해주세요."
-        autofocus
-      />
+      <input type="text" class="new-todo" placeholder="할일을 작성해주세요." autofocus />
 
       <ul class="todo-list">
-        <li data-id="3">
+        <!-- <li data-id="3">
           <div class="view">
             <input type="checkbox" class="toggle" />
             <label>영어 공부</label>
@@ -57,10 +43,11 @@
             <label>국어 공부</label>
             <button class="destroy"></button>
           </div>
-        </li>
+        </li> -->
       </ul>
     </div>
 
-    <div class="overlay">하이</div>
+    <div class="overlay"></div>
+    <script src="js/todolist.js"></script>
   </body>
 </html>
