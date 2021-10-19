@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -7,6 +7,7 @@
     <title>CalendarPage</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="./css/calendar.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;900&display=swap"
       rel="stylesheet"
@@ -17,8 +18,67 @@
     />
     <link rel="stylesheet" href="./css/calendar.css" />
   </head>
+
   <body>
-    <div class="calendar"></div>
+    <div class="calendar">
+      <h2 class="calendar-month">OCT <span> 2021</span></h2>
+      <p class="login-success-sign">손원재님, 안녕하세요</p>
+      <div class="calendar-week">
+        <div class="sunday">SUN</div>
+        <div>MON</div>
+        <div>TUE</div>
+        <div>WED</div>
+        <div>THU</div>
+        <div>FRI</div>
+        <div>SAT</div>
+      </div>
+      <div class="calendar-date">
+        <div class="not-current">26</div>
+        <div class="not-current">27</div>
+        <div class="not-current">28</div>
+        <div class="not-current">29</div>
+        <div class="not-current">30</div>
+        <div>1</div>
+        <div>2</div>
+        <div class="sunday">3</div>
+        <div>4</div>
+        <div>5</div>
+        <div>6</div>
+        <div>7</div>
+        <div>8</div>
+        <div>9</div>
+        <div class="sunday">10</div>
+        <div>11</div>
+        <div>12</div>
+        <div>13</div>
+        <div>14</div>
+        <div>15</div>
+        <div>16</div>
+        <div class="sunday">17</div>
+        <div>18</div>
+        <div class="today">19</div>
+        <div>20</div>
+        <div>21</div>
+        <div>22</div>
+        <div>23</div>
+        <div class="sunday">24</div>
+        <div>25</div>
+        <div>26</div>
+        <div>27</div>
+        <div>28</div>
+        <div>29</div>
+        <div>30</div>
+        <div class="sunday">31</div>
+        <div class="not-current">1</div>
+        <div class="not-current">2</div>
+        <div class="not-current">3</div>
+        <div class="not-current">4</div>
+        <div class="not-current">5</div>
+        <div class="not-current">6</div>
+      </div>
+      <button class="move-prev-months">◀</button>
+      <button class="move-next-months">▶</button>
+    </div>
     <div
       role="dialog"
       id="dialog1"
@@ -60,7 +120,6 @@
         </li>
       </ul>
     </div>
-
     <div class="overlay">하이</div>
   </body>
 </html>
