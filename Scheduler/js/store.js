@@ -1,19 +1,18 @@
-const userKey = 'abc';
+let userKey = '';
 
-const userInfo = {
-  name: 'home',
-  todolist: {
-    '2021-10-19': [
-      { id: 3, content: '알고리즘', completed: true },
-      { id: 2, content: '지식창고', completed: false },
-      { id: 1, content: 'TS공부', completed: false }
-    ],
-    '2021-10-20': [
-      { id: 3, content: '알고리즘', completed: true },
-      { id: 2, content: '지식창고', completed: false },
-      { id: 1, content: 'TS공부', completed: false }
-    ]
-  }
+const userInfo = {};
+
+const getUserKey = () => userKey;
+
+const setUserKey = loginUserKey => {
+  userKey = loginUserKey;
 };
 
-export { userKey, userInfo };
+const getUserInfo = () => userInfo;
+
+const setUserInfo = ({ name, todolist }) => {
+  userInfo.name = name;
+  userInfo.todolist = todolist;
+};
+
+export { getUserKey, setUserKey, getUserInfo, setUserInfo };
