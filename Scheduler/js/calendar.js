@@ -1,58 +1,54 @@
+import { userKey, userInfo } from './store.js';
+
+let todos = [];
+const allTodos = userInfo.todolist;
+
 // DOM Nodes
+
 const $calendarDate = document.querySelector('.calendar-date');
-const $popup = document.querySelector('.popup');
-const $overlay = document.querySelector('.overlay');
 
-// Variables ------------------------------
-const selectedYear = new Date().getFullYear();
-let selectedMonth = new Date().getMonth();
+const $yearMonth = document.querySelector('.year-month');
+const $newTodo = document.querySelector('.new-todo');
+const $todoList = document.querySelector('.todo-list');
 
-// const userData = {
-//   userName: 'jimmy',
-//   // selectedDate: null,
-//   todolist: [
-//     { id: 3, content: '알고리즘', completed: true },
-//     { id: 2, content: '지식창고', completed: false },
-//     { id: 1, content: 'TS공부', completed: false }
-//   ]
-// };
+const convertToRegularMonth = (() => {
+  const monthStr = [
+    'JAN',
+    'FEB',
+    'MAR',
+    'APR',
+    'MAY',
+    'JUN',
+    'JUL',
+    'AUG',
+    'SEP',
+    'OCT',
+    'NOV',
+    'DEC'
+  ];
+  const monthNum = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
-// Functions------------------------------------------
+  return {
+    makeStr(month) {
+      return monthStr[month];
+    },
+    makeNum(month) {
+      return monthNum[month];
+    }
+  };
+})();
 
+// date 채우기 (첫째날, 마지막날 구해서 date 배열 채우기)
 const createMonthDate = (
   () => (length, obj, start) =>
     // eslint-disable-next-line no-param-reassign
     Array.from({ length }, () => ({ ...obj, date: start++ }))
 )();
 
+// selectedYear , selectedMonth -> 고치기
+let [selectedYear, selectedMonth] = [new Date().getFullYear(), new Date().getMonth()];
+
 const render2 = () => {
-  const convertToRegularMonth = (() => {
-    const monthName = [
-      'JAN',
-      'FEB',
-      'MAR',
-      'APR',
-      'MAY',
-      'JUN',
-      'JUL',
-      'AUG',
-      'SEP',
-      'OCT',
-      'NOV',
-      'DEC'
-    ];
-    const monthNum = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-
-    return {
-      makeStr(month) {
-        return monthName[month];
-      },
-      makeNum(month) {
-        return monthNum[month];
-      }
-    };
-  })();
-
   const prevYear = selectedYear - !selectedMonth;
   const prevMonth = selectedMonth === 0 ? 11 : selectedMonth - 1;
   const firstDayOfMonth = new Date(selectedYear, selectedMonth, 1).getDay();
@@ -94,50 +90,140 @@ const render2 = () => {
       ({ year, month, date, current }) =>
         `<button class="${
           current ? '' : 'other-month'
-        }"><time datetime="${year}-${month}-${date}">${date}</time></button>`
+        }"><time datetime="${year}-${month}-${date}">${date}<div class="todo"></div></time></time></button>`
     )
     .join('');
+
+  $calendarDate.querySelectorAll('time').forEach(data => {
+    if (Object.keys(allTodos).includes(data.dateTime)) {
+      data.firstElementChild.innerHTML = `<div class="todo-item">${
+        allTodos[data.dateTime][0].content
+      }</div><div class="todo-item">${allTodos[data.dateTime][1].content}</div>`;
+    }
+  });
 };
 
 // Event bindings --------------------------------------
 window.addEventListener('DOMContentLoaded', render2);
 
-// document.querySelector('.move-prev-months').onclick = () => {
-//   if (selectedMonth === 0) {
-//     selectedMonth = 11;
-//     selectedYear -= 1;
-//   } else selectedMonth -= 1;
+window.addEventListener('beforeunload', event => {
+  event.preventDefault();
 
-//   render2();
-// };
+  localStorage.setItem(
+    'ho',
+    JSON.stringify({
+      name: 'home',
+      todolist: allTodos
+    })
+  );
+  event.returnValue = '';
+});
 
-// document.querySelector('.move-next-months').onclick = () => {
-//   if (selectedMonth === 11) {
-//     selectedMonth = 0;
-//     selectedYear += 1;
-//   } else selectedMonth += 1;
+document.querySelector('.move-prev-months').onclick = () => {
+  if (selectedMonth === 0) {
+    selectedMonth = 11;
+    selectedYear -= 1;
+  } else selectedMonth -= 1;
 
-//   render2();
-// };
-
-document.querySelector('.calendar').onclick = () => {
-  // if (!e.target.matches('button')) return;
-  if (Math.abs(11 - selectedMonth) === 0 || Math.abs(11 - selectedMonth) === 11) {
-    selectedMonth = Math.abs(selectedMonth - 11);
-  } else selectedMonth += 1;
   render2();
 };
+
+document.querySelector('.move-next-months').onclick = () => {
+  if (selectedMonth === 11) {
+    selectedMonth = 0;
+    selectedYear += 1;
+  } else selectedMonth += 1;
+
+  render2();
+};
+
+// ---------------------------------------------------------------------------------------------
+
+const $popup = document.querySelector('.popup');
+const $overlay = document.querySelector('.overlay');
 
 const displayPopup = () => {
   $popup.style.display = 'block';
   $overlay.style.display = 'block';
 };
 
-$calendarDate.onclick = () => {
-  displayPopup();
+const updateAllTodos = () => {
+  if (todos.length === 0) delete allTodos[`${document.querySelector('.year-month').textContent}`];
+  if (todos.length !== 0) allTodos[`${document.querySelector('.year-month').textContent}`] = todos;
 };
 
 $overlay.onclick = () => {
   $popup.style.display = 'none';
   $overlay.style.display = 'none';
+
+  updateAllTodos(todos);
+  render2();
+};
+
+const render = () => {
+  $todoList.innerHTML = todos
+    .map(
+      ({ id, content, completed }) => `
+    <li data-id="${id}">
+        <div class="view">
+        <input type="checkbox" class="toggle" ${completed ? 'checked' : ''}/>
+        <label>${content}</label>
+        <button class="destroy"></button>
+        </div>
+    </li>`
+    )
+    .join('');
+};
+
+const setTodo = newTodo => {
+  todos = newTodo;
+  render();
+};
+
+$calendarDate.onclick = e => {
+  const targetDateTime = e.target.closest('time').getAttribute('datetime');
+  if (userInfo.todolist[`${targetDateTime}`]) {
+    setTodo(userInfo.todolist[`${targetDateTime}`]);
+  } else {
+    setTodo([]);
+  }
+  $yearMonth.textContent = targetDateTime;
+
+  displayPopup();
+};
+
+// ---------------------------------------------------------------------------------------------
+
+const generateId = () => Math.max(...todos.map(todo => todo.id), 0) + 1;
+
+const addTodo = content => {
+  setTodo([{ id: generateId(), content, completed: false }, ...todos]);
+};
+
+const toggleTodoCompleted = id => {
+  setTodo(todos.map(todo => (todo.id === +id ? { ...todo, completed: !todo.completed } : todo)));
+};
+
+const removeTodo = id => {
+  setTodo(todos.filter(todo => todo.id !== +id));
+};
+
+$newTodo.onkeyup = e => {
+  if (e.key !== 'Enter' || e.target.value.trim() === '') return;
+
+  addTodo(e.target.value);
+
+  e.target.value = '';
+};
+
+$todoList.onchange = e => {
+  if (!e.target.classList.contains('toggle')) return;
+
+  toggleTodoCompleted(e.target.closest('li').dataset.id);
+};
+
+$todoList.onclick = e => {
+  if (!e.target.classList.contains('destroy')) return;
+
+  removeTodo(e.target.closest('li').dataset.id);
 };
