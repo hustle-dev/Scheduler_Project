@@ -30,16 +30,17 @@ const convertToRealMonth = (() => {
 
 // state
 
-const userData = {
-  userName: 'jimmy',
-  // selectedDate: null,
-  todolist: [
-    { id: 3, content: '알고리즘', completed: true },
-    { id: 2, content: '지식창고', completed: false },
-    { id: 1, content: 'TS공부', completed: false }
-  ]
-};
+// const userData = {
+//   userName: 'jimmy',
+//   // selectedDate: null,
+//   todolist: [
+//     { id: 3, content: '알고리즘', completed: true },
+//     { id: 2, content: '지식창고', completed: false },
+//     { id: 1, content: 'TS공부', completed: false }
+//   ]
+// };
 
+// const userData
 // Functions
 
 // date format 으로 바꾸기 (넘겨줄 데이터)
@@ -78,7 +79,7 @@ const dataOfPrevMonth = {
   month: convertToRealMonth.makeNum(prevMonth),
   current: false
 };
-const dataOfThisMonth = {
+const dateOfThisMonth = {
   year: selectedYear,
   month: convertToRealMonth.makeNum(selectedMonth),
   current: true
@@ -91,7 +92,7 @@ const dataOfNextMonth = {
 
 const mergeEachMonth = [
   ...createMonthDate(getFirstDayOfMonth, dataOfPrevMonth, getLastDateMonth - getFirstDayOfMonth),
-  ...createMonthDate(getLastDateMonth, dataOfThisMonth, 1),
+  ...createMonthDate(getLastDateMonth, dateOfThisMonth, 1),
   ...createMonthDate(lengthOfNextMonth, dataOfNextMonth, 1)
 ];
 
@@ -112,12 +113,30 @@ window.addEventListener('DOMContentLoaded', render2);
 // prev-button 누르면 앞으로, next-buttons 누르면 다음으로 이동
 $calendar.onclick = e => {
   if (!e.target.matches('button')) return;
-  console.log(e.target);
-  if (e.target.classList.contains('.move-next-months')) {
-    [selectedYear, selectedMonth] = [new Date().getFullYear(), new Date().getMonth() + 1];
+  if (e.target.classList.contains('move-prev-months')) {
+    [selectedYear, selectedMonth] = [new Date().getFullYear(), new Date().getMonth() - 1];
   }
 
-  if (e.target.classList.contains('.move-next-months')) {
-    console.log('v');
+  if (e.target.classList.contains('move-next-months')) {
+    [selectedYear, selectedMonth] = [new Date().getFullYear(), new Date().getMonth() + 1];
   }
+};
+
+const $calendarDate = document.querySelector('.calendar-date');
+
+const $popup = document.querySelector('.popup');
+const $overlay = document.querySelector('.overlay');
+
+const displayPopup = () => {
+  $popup.style.display = 'block';
+  $overlay.style.display = 'block';
+};
+
+$overlay.onclick = () => {
+  $popup.style.display = 'none';
+  $overlay.style.display = 'none';
+};
+
+$calendarDate.onclick = () => {
+  displayPopup();
 };

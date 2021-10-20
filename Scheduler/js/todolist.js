@@ -70,25 +70,4 @@ $todoList.onclick = e => {
   removeTodo(e.target.closest('li').dataset.id);
 };
 
-// 투두리스트와 관련 없는 부분 (밖으로 빼야할 부분)
-
-const $calendarDate = document.querySelector('.calendar-date');
-
-const $popup = document.querySelector('.popup');
-const $overlay = document.querySelector('.overlay');
-
-const displayPopup = () => {
-  $popup.style.display = 'block';
-  $overlay.style.display = 'block';
-};
-
-$overlay.onclick = () => {
-  $popup.style.display = 'none';
-  $overlay.style.display = 'none';
-};
-
-$calendarDate.onclick = e => {
-  displayPopup();
-};
-
 // console.log(JSON.parse(localStorage.getItem('user')).abc.todolist['20211019']);
