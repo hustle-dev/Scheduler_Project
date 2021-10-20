@@ -1,5 +1,5 @@
-// hash
-const hash = objectHash.sha1;
+// eslint-disable-next-line no-undef
+const hashfunc = objectHash.sha1;
 // console.log(hash({ userid: 'sonwj0915@naver.com', password: '123456' }));
 
 // state object
@@ -40,9 +40,6 @@ const validateAllsignup = {
 const $signinForm = document.querySelector('.form.signin');
 const $signupForm = document.querySelector('.form.signup');
 const [$signupLink, $signinLink] = document.querySelectorAll('.link > a');
-
-// helper
-// const hashfunc =
 
 const toggleValidIcon = ($icon, bool) => {
   $icon.classList.toggle('hidden', bool);
@@ -129,7 +126,8 @@ $signinForm.onsubmit = e => {
 
   const [{ value: userid }, { value: password }] = e.currentTarget.querySelectorAll('input');
 
-  if (!JSON.parse(localStorage.getItem('users'))[hash({ userid, password })]) return;
+  // console.log(JSON.parse(localStorage.getItem('users'))[hashfunc({ userid, password })]);
+  if (!JSON.parse(localStorage.getItem('users'))[hashfunc({ userid, password })]) return;
 
   // 로그인 성공
 
@@ -143,7 +141,7 @@ $signupForm.onsubmit = e => {
   localStorage.setItem(
     'users',
     JSON.stringify({
-      [hash({ userid, password })]: {
+      [hashfunc({ userid, password })]: {
         userid,
         password,
         name,
