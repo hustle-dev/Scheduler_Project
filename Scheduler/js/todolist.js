@@ -1,11 +1,19 @@
-let todos = JSON.parse(localStorage.getItem('user')).abc.todolist['20211019'];
+// todos를 현재 로컬스토리지 기준 오늘 일자에 있는 todolist로 업데이트를 해야함.
+// let todos = [JSON.parse(localStorage.getItem('user')).abc.todolist['20211019'];]
+let todos = [
+  { id: 3, content: '알고리즘', completed: true },
+  { id: 2, content: '지식창고', completed: false },
+  { id: 1, content: 'TS공부', completed: false }
+];
 
-const $popup = document.querySelector('.popup');
+const $yearMonth = document.querySelector('.year-month');
 const $newTodo = document.querySelector('.new-todo');
 const $todoList = document.querySelector('.todo-list');
-const $overlay = document.querySelector('.overlay');
 
 const render = () => {
+  // 이 부분에 현재 date 받아온거 넣으면 됨 (나중에) 현재는 하드코딩 '2021/10/19'
+  $yearMonth.textContent = '2021/10/19';
+
   $todoList.innerHTML = todos
     .map(
       ({ id, content, completed }) => `
@@ -22,6 +30,7 @@ const render = () => {
 
 const setTodo = newTodo => {
   todos = newTodo;
+  // 이 부분에서 로컬 스토리지에서 관리되고 있는 날짜의 todo를 관리해주어야 함
   render();
 };
 
@@ -42,7 +51,7 @@ const removeTodo = id => {
 window.addEventListener('DOMContentLoaded', render);
 
 $newTodo.onkeyup = e => {
-  if (e.key !== 'Enter' || e.target.value === '') return;
+  if (e.key !== 'Enter' || e.target.value.trim() === '') return;
 
   addTodo(e.target.value);
 
@@ -59,11 +68,6 @@ $todoList.onclick = e => {
   if (!e.target.classList.contains('destroy')) return;
 
   removeTodo(e.target.closest('li').dataset.id);
-};
-
-$overlay.onclick = () => {
-  $popup.style.display = 'none';
-  $overlay.style.display = 'none';
 };
 
 // console.log(JSON.parse(localStorage.getItem('user')).abc.todolist['20211019']);
