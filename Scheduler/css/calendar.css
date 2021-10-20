@@ -106,7 +106,7 @@ body {
 /* pop-up */
 
 .popup {
-  /* display: none; */
+  display: none;
   position: absolute;
   padding: 40px;
   max-width: 880px;
@@ -230,7 +230,7 @@ body {
 }
 
 .overlay {
-  /* display: none; */
+  display: none;
   position: absolute;
   background-color: #000000;
   opacity: 0.3;

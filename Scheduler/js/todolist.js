@@ -83,8 +83,6 @@ $overlay.onclick = () => {
 };
 
 $calendarDate.onclick = e => {
-  if (e.target.classList.contains('not-current')) return;
-
   displayPopup();
 };
 
