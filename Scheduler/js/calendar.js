@@ -1,5 +1,6 @@
 // DOM Nodes
 const $calendar = document.querySelector('.calendar');
+const $calendarDate = document.querySelector('.calendar-date');
 
 const convertToRealMonth = (() => {
   const monthStr = [
@@ -108,7 +109,7 @@ const render2 = () => {
 };
 
 // Event bindings --------------------------------------
-window.addEventListener('DOMContentLoaded', render2);
+// window.addEventListener('DOMContentLoaded', render2);
 
 // prev-button 누르면 앞으로, next-buttons 누르면 다음으로 이동
 $calendar.onclick = e => {
@@ -121,8 +122,6 @@ $calendar.onclick = e => {
     [selectedYear, selectedMonth] = [new Date().getFullYear(), new Date().getMonth() + 1];
   }
 };
-
-const $calendarDate = document.querySelector('.calendar-date');
 
 const $popup = document.querySelector('.popup');
 const $overlay = document.querySelector('.overlay');

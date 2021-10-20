@@ -78,6 +78,7 @@ button {
   left: 0;
   background: none;
   color: #5a5a5a;
+  position: relative;
 }
 
 .calendar-date button {
@@ -86,11 +87,14 @@ button {
   line-height: 19px;
   padding: 0;
 
+  position: relative;
+  text-align: start;
+
   color: #5a5a5a;
 }
 .calendar-date button time {
   display: block;
-  padding: 6px 50px 60px 6px;
+  padding: 6px 50px 60px 0px;
 }
 .calendar-date .today {
   font-weight: 400;
@@ -99,6 +103,7 @@ button {
 .calendar-date .not-current {
   color: #adadad;
 }
+
 .move-prev-months {
   position: absolute;
   top: 50%;
@@ -118,6 +123,13 @@ button {
   cursor: pointer;
   font-size: 30px;
   right: 30px;
+}
+
+.todo {
+  display: inline-block;
+  /* position: absolute; */
+  top: 10px;
+  background-color: lime;
 }
 
 /* pop-up */
