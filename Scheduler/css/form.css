@@ -70,11 +70,6 @@ body {
   color: var(--sub-text-color);
 }
 
-#signin-password,
-#signup-password {
-  font-size: 3.6rem;
-}
-
 .input-container input {
   color: var(--font-color);
   width: 100%;
@@ -96,7 +91,7 @@ body {
   left: 0.4rem;
   line-height: 60px;
   cursor: pointer;
-  transition: var(--trasition-delay) ease;
+  /* transition: var(--trasition-delay) ease; */
 }
 
 .input-container .bar {
@@ -180,7 +175,7 @@ body {
   margin: 20px 0 10px;
   color: var(--sub-text-color);
   text-align: center;
-  transition: var(--trasition-delay) ease;
+  /* transition: var(--trasition-delay) ease; */
 }
 
 .link > a:hover {
@@ -189,4 +184,8 @@ body {
 
 .hidden {
   display: none !important;
+}
+
+.addtransition {
+  transition: var(--trasition-delay) ease;
 }
