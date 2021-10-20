@@ -35,13 +35,23 @@ const validateAllsignup = {
 };
 
 // DOM Nodes
-const $siginForm = document.querySelector('.form.signin');
+const $signinForm = document.querySelector('.form.signin');
 const $signupForm = document.querySelector('.form.signup');
 
 // helper
 // const hashfunc =
 
-const toggleValidIcon = ($icon, bool) => $icon.classList.toggle('hidden', bool);
+const toggleValidIcon = ($icon, bool) => {
+  $icon.classList.toggle('hidden', bool);
+};
+
+const toggleValidState = (checkValidObj, prop, bool) => {
+  checkValidObj[prop] = bool;
+};
+
+const ActiveSubmit = ($submitButton, checkValidObj) => {
+  $submitButton.toggleAttribute('disabled', !Object.values(checkValidObj).every(el => el));
+};
 
 const noticeError = (value, prop) => (VALID_PATTERNS[prop].test(value) ? '' : ERROR_MESSAGES[prop]);
 
@@ -54,6 +64,7 @@ const updateConfirmPasswordRegExp = value => {
  */
 const liveCheckConfirmPassword = value => {
   const [$confirmPasswordSuccessIcon, $confirmPasswordFailIcon] = confirmPasswordObj.$icon;
+  const testConfirmPassword = VALID_PATTERNS.confirm_password.test(confirmPasswordObj.$input.value);
 
   updateConfirmPasswordRegExp(value);
 
@@ -81,18 +92,38 @@ const validCheckAction = e => {
 
   const isSignup = e.currentTarget.classList.contains('signup');
 
+  const checkValidObj = isSignup ? validateAllsignup : validateAllsignin;
+
   if (prop === 'password' && isSignup) liveCheckConfirmPassword(value);
 
+  // active submit
   toggleValidIcon($successIcon, !VALID_PATTERNS[prop].test(value));
   toggleValidIcon($failIcon, VALID_PATTERNS[prop].test(value));
+  toggleValidState(checkValidObj, prop, VALID_PATTERNS[prop].test(value));
+  ActiveSubmit(e.currentTarget.querySelector('.button'), checkValidObj);
 
   $inputContainer.querySelector('.error-message').textContent = noticeError(value, prop);
 };
+
+// hash function
+// const hash = (id, password) => {};
 
 /**
  * Event binding
  * @todo throttle
  */
-// $siginForm.oninput = validCheckAction;
+window.addEventListener('load', () => {
+  [...document.querySelectorAll('.input-container input + label')].forEach($label =>
+    $label.classList.add('addtransition')
+  );
+});
+
+// $signinForm.oninput = validCheckAction;
 // $signupForm.oninput = validCheckAction;
-[$siginForm.oninput, $signupForm.oninput] = [validCheckAction, validCheckAction];
+[$signinForm.oninput, $signupForm.oninput] = [validCheckAction, validCheckAction];
+
+$signinForm.onsubmit = e => {};
+$signupForm.onsubmit = e => {
+  e.currentTarget.querySelectorAll('input');
+  localStorage.setItem();
+};
