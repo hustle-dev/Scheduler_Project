@@ -55,19 +55,17 @@ button {
   margin: 0 auto;
 }
 
-.calendar-week .sunday,
-.calendar-date .sunday {
-  color: #ff3838;
+.calendar-date .other-month {
+  color: grey;
 }
 
-.date-grid button:first-child,
-.date-grid button:nth-child(7n + 1) {
-  color: var(--red);
+.calendar-week div:first-child,
+.calendar-date button:nth-child(7n + 1) {
+  color: red;
 }
 
-.date-grid button:first-child.other-month,
-.date-grid button:nth-child(7n + 1).other-month {
-  color: var(--gray);
+.calendar-date button:nth-child(7n + 1).other-month {
+  color: grey;
 }
 .calendar-week button {
   border-bottom: 1px solid grey !important;
@@ -86,9 +84,13 @@ button {
   border-top: 1px solid grey !important;
   font-size: 16px;
   line-height: 19px;
-  padding: 6px 50px 60px 6px;
+  padding: 0;
 
   color: #5a5a5a;
+}
+.calendar-date button time {
+  display: block;
+  padding: 6px 50px 60px 6px;
 }
 .calendar-date .today {
   font-weight: 400;
@@ -121,7 +123,7 @@ button {
 /* pop-up */
 
 .popup {
-  /* display: none; */
+  display: none;
   position: absolute;
   padding: 40px;
   max-width: 880px;
@@ -245,7 +247,7 @@ button {
 }
 
 .overlay {
-  /* display: none; */
+  display: none;
   position: absolute;
   background-color: #000000;
   opacity: 0.3;
