@@ -6,6 +6,12 @@ body {
   justify-content: center;
   overflow: hidden;
 }
+button {
+  margin: 0;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+}
 /* calendar */
 .login-success-sign {
   font-weight: 500;
@@ -54,7 +60,16 @@ body {
   color: #ff3838;
 }
 
-.calendar-week div {
+.date-grid button:first-child,
+.date-grid button:nth-child(7n + 1) {
+  color: var(--red);
+}
+
+.date-grid button:first-child.other-month,
+.date-grid button:nth-child(7n + 1).other-month {
+  color: var(--gray);
+}
+.calendar-week button {
   border-bottom: 1px solid grey !important;
   text-align: center;
   font-weight: bold;
@@ -67,7 +82,7 @@ body {
   color: #5a5a5a;
 }
 
-.calendar-date div {
+.calendar-date button {
   border-top: 1px solid grey !important;
   font-size: 16px;
   line-height: 19px;
@@ -106,6 +121,7 @@ body {
 /* pop-up */
 
 .popup {
+  /* display: none; */
   position: absolute;
   padding: 40px;
   max-width: 880px;
@@ -229,6 +245,7 @@ body {
 }
 
 .overlay {
+  /* display: none; */
   position: absolute;
   background-color: #000000;
   opacity: 0.3;
