@@ -1,5 +1,10 @@
 // todos를 현재 로컬스토리지 기준 오늘 일자에 있는 todolist로 업데이트를 해야함.
-let todos = JSON.parse(localStorage.getItem('user')).abc.todolist['20211019'];
+// let todos = [JSON.parse(localStorage.getItem('user')).abc.todolist['20211019'];]
+let todos = [
+  { id: 3, content: '알고리즘', completed: true },
+  { id: 2, content: '지식창고', completed: false },
+  { id: 1, content: 'TS공부', completed: false }
+];
 
 const $yearMonth = document.querySelector('.year-month');
 const $newTodo = document.querySelector('.new-todo');
@@ -83,8 +88,6 @@ $overlay.onclick = () => {
 };
 
 $calendarDate.onclick = e => {
-  if (e.target.classList.contains('not-current')) return;
-
   displayPopup();
 };
 
