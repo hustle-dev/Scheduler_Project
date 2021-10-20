@@ -86,6 +86,7 @@ button {
   font-size: 16px;
   line-height: 19px;
   padding: 0;
+  /* position: relative; */
 
   text-align: start;
 
@@ -95,7 +96,8 @@ button {
   display: block;
   background-color: transparent;
   padding: 6px 50px 60px 0px;
-  /* z-index: -1; */
+  position: relative;
+  z-index: 10;
 }
 .calendar-date button time:hover {
   background: rgba(243, 243, 243, 0.2);
@@ -133,12 +135,7 @@ button {
 
 .todo {
   display: inline-block;
-  width: 100%;
-
-  background-color: yellow;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  overflow: hidden;
+  width: 90%;
 
   color: black;
   font-weight: bold;
@@ -146,8 +143,17 @@ button {
   position: absolute;
   top: 30px;
   left: 0px;
-  /* top: 30px;
-  left: 0px; */
+  z-index: -10;
+}
+
+.todo-item {
+  margin-bottom: 5px;
+  position: relative;
+  background-color: yellow;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  z-index: -10;
 }
 
 /* pop-up */
