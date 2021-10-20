@@ -15,6 +15,7 @@
     <link href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="./css/calendar.css" />
   </head>
+
   <body>
     <div class="calendar">
       <h2 class="calendar-month">OCT <span> 2021</span></h2>
@@ -28,33 +29,7 @@
         <div>FRI</div>
         <div>SAT</div>
       </div>
-      <div class="calendar-date">
-        <button class="other-month"><time datetime="2021-9-26">26</time></button>
-        <button class="other-month"><time datetime="2021-9-27">27</time></button>
-        <button class="other-month"><time datetime="2021-9-28">28</time></button>
-        <button class="other-month"><time datetime="2021-9-29">29</time></button>
-        <button class="other-month"><time datetime="2021-9-30">30</time></button>
-        <button class="">
-          <time datetime="2021-10-1"
-            >1
-            <div class="todo">
-              <div class="todo-item">안녕하이fdsajfdsjf</div>
-              <div>안녕하이fjsadfjskdfjksd</div>
-            </div>
-          </time>
-        </button>
-        <button class=""><time datetime="2021-10-2">2</time></button>
-        <button class=""><time datetime="2021-10-3">3</time></button>
-        <button class=""><time datetime="2021-10-4">4</time></button>
-        <button class=""><time datetime="2021-10-5">5</time></button>
-        <button class=""><time datetime="2021-10-6">6</time></button>
-        <button class=""><time datetime="2021-10-7">7</time></button>
-        <button class=""><time datetime="2021-10-8">8</time></button>
-        <button class=""><time datetime="2021-10-20">20</time></button>
-        <button class="other-month"><time datetime="2021-11-1">1</time></button>
-        <button class="other-month"><time datetime="2021-11-2">2</time></button>
-        <button class="other-month"><time datetime="2021-11-3">3</time></button>
-      </div>
+      <div class="calendar-date"></div>
       <button class="move-prev-months">◀</button>
       <button class="move-next-months">▶</button>
     </div>
@@ -62,8 +37,10 @@
       <h2>오늘의 할일</h2>
       <div class="year-month"></div>
       <input type="text" class="new-todo" placeholder="할일을 작성해주세요." autofocus />
+
       <ul class="todo-list"></ul>
     </div>
+
     <div class="overlay"></div>
     <script src="js/calendar.js"></script>
     <script src="js/todolist.js"></script>

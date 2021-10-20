@@ -69,7 +69,7 @@ button {
 }
 .calendar-week button {
   border-bottom: 1px solid grey !important;
-  text-align: center;
+  /* text-align: center; */
   font-weight: bold;
   font-size: 28px;
   line-height: 10px;
@@ -87,7 +87,6 @@ button {
   line-height: 19px;
   padding: 0;
 
-  position: relative;
   text-align: start;
 
   color: #5a5a5a;

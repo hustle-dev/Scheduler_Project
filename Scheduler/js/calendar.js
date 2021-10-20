@@ -1,33 +1,5 @@
 // DOM Nodes
 const $calendar = document.querySelector('.calendar');
-const $calendarDate = document.querySelector('.calendar-date');
-
-const convertToRealMonth = (() => {
-  const monthStr = [
-    'JAN',
-    'FEB',
-    'MAR',
-    'APR',
-    'MAy',
-    'JUN',
-    'JUL',
-    'AUG',
-    'SEP',
-    'OCT',
-    'NOV',
-    'DEC'
-  ];
-  const monthNum = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-
-  return {
-    makeStr(month) {
-      return monthStr[month];
-    },
-    makeNum(month) {
-      return monthNum[month];
-    }
-  };
-})();
 
 // state
 
@@ -62,42 +34,70 @@ let [selectedYear, selectedMonth] = [new Date().getFullYear(), new Date().getMon
 // 이번달 정보
 // const getLastDayOfMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
 
-// 저번달 정보
-const prevYear = selectedYear - !selectedMonth;
-const prevMonth = selectedMonth === 0 ? 11 : selectedMonth - 1;
-const getFirstDayOfMonth = new Date(selectedYear, selectedMonth, 1).getDay();
-const getLastDateMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
-
-// 다음달 정보
-const nextYear = selectedYear + +(selectedMonth === 11);
-const nextMonth = selectedMonth === 11 ? 0 : selectedMonth + 1;
-const lengthOfNextMonth = 6 - new Date(selectedYear, selectedMonth + 1, 0).getDay();
-
-// 이거 활용할끄야
-// const getMonth = month => new Date(0, month).toLocaleString('en-us', { month: 'short' });
-const dataOfPrevMonth = {
-  year: prevYear,
-  month: convertToRealMonth.makeNum(prevMonth),
-  current: false
-};
-const dateOfThisMonth = {
-  year: selectedYear,
-  month: convertToRealMonth.makeNum(selectedMonth),
-  current: true
-};
-const dataOfNextMonth = {
-  year: nextYear,
-  month: convertToRealMonth.makeNum(nextMonth),
-  current: false
-};
-
-const mergeEachMonth = [
-  ...createMonthDate(getFirstDayOfMonth, dataOfPrevMonth, getLastDateMonth - getFirstDayOfMonth),
-  ...createMonthDate(getLastDateMonth, dateOfThisMonth, 1),
-  ...createMonthDate(lengthOfNextMonth, dataOfNextMonth, 1)
-];
-
 const render2 = () => {
+  const convertToRealMonth = (() => {
+    const monthStr = [
+      'JAN',
+      'FEB',
+      'MAR',
+      'APR',
+      'MAY',
+      'JUN',
+      'JUL',
+      'AUG',
+      'SEP',
+      'OCT',
+      'NOV',
+      'DEC'
+    ];
+    const monthNum = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+    return {
+      makeStr(month) {
+        return monthStr[month];
+      },
+      makeNum(month) {
+        return monthNum[month];
+      }
+    };
+  })();
+  // 저번달 정보
+  const prevYear = selectedYear - !selectedMonth;
+  const prevMonth = selectedMonth === 0 ? 11 : selectedMonth - 1;
+  const getFirstDayOfMonth = new Date(selectedYear, selectedMonth, 1).getDay();
+  const getLastDateMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
+
+  // 다음달 정보
+  const nextYear = selectedYear + +(selectedMonth === 11);
+  const nextMonth = selectedMonth === 11 ? 0 : selectedMonth + 1;
+  const lengthOfNextMonth = 6 - new Date(selectedYear, selectedMonth + 1, 0).getDay();
+
+  // 이거 활용할끄야
+  // const getMonth = month => new Date(0, month).toLocaleString('en-us', { month: 'short' });
+  const dataOfPrevMonth = {
+    year: prevYear,
+    month: convertToRealMonth.makeNum(prevMonth),
+    current: false
+  };
+  const dateOfThisMonth = {
+    year: selectedYear,
+    month: convertToRealMonth.makeNum(selectedMonth),
+    current: true
+  };
+  const dataOfNextMonth = {
+    year: nextYear,
+    month: convertToRealMonth.makeNum(nextMonth),
+    current: false
+  };
+
+  const mergeEachMonth = [
+    ...createMonthDate(getFirstDayOfMonth, dataOfPrevMonth, getLastDateMonth - getFirstDayOfMonth),
+    ...createMonthDate(getLastDateMonth, dateOfThisMonth, 1),
+    ...createMonthDate(lengthOfNextMonth, dataOfNextMonth, 1)
+  ];
+  document.querySelector('.calendar-month').innerHTML = `${convertToRealMonth.makeStr(
+    selectedMonth
+  )}<span> ${selectedYear}</span>`;
   $calendarDate.innerHTML = mergeEachMonth
     .map(
       ({ year, month, date, current }) =>
@@ -109,19 +109,24 @@ const render2 = () => {
 };
 
 // Event bindings --------------------------------------
-// window.addEventListener('DOMContentLoaded', render2);
+window.addEventListener('DOMContentLoaded', render2);
 
 // prev-button 누르면 앞으로, next-buttons 누르면 다음으로 이동
 $calendar.onclick = e => {
   if (!e.target.matches('button')) return;
   if (e.target.classList.contains('move-prev-months')) {
-    [selectedYear, selectedMonth] = [new Date().getFullYear(), new Date().getMonth() - 1];
+    selectedMonth -= 1;
+    render2();
   }
 
   if (e.target.classList.contains('move-next-months')) {
-    [selectedYear, selectedMonth] = [new Date().getFullYear(), new Date().getMonth() + 1];
+    console.log('b');
+    selectedMonth += 1;
+    render2();
   }
 };
+
+const $calendarDate = document.querySelector('.calendar-date');
 
 const $popup = document.querySelector('.popup');
 const $overlay = document.querySelector('.overlay');
