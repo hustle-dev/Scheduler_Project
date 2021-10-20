@@ -1,6 +1,6 @@
 import { userKey, userInfo } from './store.js';
 
-console.log(userInfo.todolist);
+console.log(userInfo.todolist['2021-10-19']);
 
 // console.log(userKey === 'abc');
 
@@ -123,12 +123,10 @@ const render2 = () => {
     .join('');
 
   $calendarDate.querySelectorAll('time').forEach(data => {
-    console.log(data.dateTime);
-    if (userInfo.todolist.includes(data.dateTime)) {
-      console.log('hi');
-      // data.firstElementChild.innerHTML = `<div class="todo-item">${
-      //   userInfo.todolist[`${targetDateTime}`][0].content
-      // }</div><div class="todo-item">${userInfo.todolist[`${targetDateTime}`][1].content}</div>`;
+    if (Object.keys(userInfo.todolist).includes(data.dateTime)) {
+      data.firstElementChild.innerHTML = `<div class="todo-item">${
+        userInfo.todolist[data.dateTime][0].content
+      }</div><div class="todo-item">${userInfo.todolist[data.dateTime][1].content}</div>`;
     }
   });
 };
@@ -162,9 +160,6 @@ $overlay.onclick = () => {
 };
 
 const render = date => {
-  // 이 부분에 현재 date 받아온거 넣으면 됨 (나중에) 현재는 하드코딩 '2021/10/19'
-  $yearMonth.textContent = date;
-
   $todoList.innerHTML = todos
     .map(
       ({ id, content, completed }) => `
@@ -179,23 +174,17 @@ const render = date => {
     .join('');
 };
 
-const setTodo = (newTodo, date) => {
+const setTodo = newTodo => {
   todos = newTodo;
-  render(date);
-  localStorage.setItem('user');
+  render();
 };
 
 $calendarDate.onclick = e => {
   const targetDateTime = e.target.closest('time').getAttribute('datetime');
-  console.log(userInfo.todolist[`${targetDateTime}`]);
-  // if (JSON.parse(localStorage.getItem('user'))[userKey].todolist[`${targetDateTime}`]) {
-  //   setTodo(
-  //     JSON.parse(localStorage.getItem('user'))[userKey].todolist[`${targetDateTime}`],
-  //     targetDateTime
-  //   );
-  // } else {
-  //   setTodo([], targetDateTime);
-  // }
+  if (userInfo.todolist[`${targetDateTime}`]) {
+    setTodo(userInfo.todolist[`${targetDateTime}`]);
+  }
+  $yearMonth.textContent = targetDateTime;
 
   displayPopup();
 };
@@ -216,8 +205,6 @@ const removeTodo = id => {
   setTodo(todos.filter(todo => todo.id !== +id));
 };
 
-// window.addEventListener('DOMContentLoaded', render);
-
 $newTodo.onkeyup = e => {
   if (e.key !== 'Enter' || e.target.value.trim() === '') return;
 
@@ -237,5 +224,3 @@ $todoList.onclick = e => {
 
   removeTodo(e.target.closest('li').dataset.id);
 };
-
-export default setTodo;
