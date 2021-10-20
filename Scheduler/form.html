@@ -1,86 +1,85 @@
 <!DOCTYPE html>
 <html lang="ko">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Form Page</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;700;900&display=swap"
-      rel="stylesheet"
-    />
-    <link href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" rel="stylesheet" />
-    <link rel="stylesheet" href="./css/form.css" />
-  </head>
 
-  <body>
-    <form class="form signin hidden" novalidate>
-      <div class="title">SIGN IN</div>
-      <div class="input-outer">
-        <div class="input-container">
-          <input type="text" id="signin-userid" name="userid" required />
-          <label for="signin-userid">email</label>
-          <span class="bar"></span>
-          <i class="bx bx-check-circle icon icon-success hidden"></i>
-          <i class="bx bx-x-circle icon icon-fail hidden"></i>
-          <div class="error-message"></div>
-        </div>
-        <div class="input-container">
-          <input type="password" id="signin-password" name="password" required />
-          <label for="signin-password">password</label>
-          <span class="bar"></span>
-          <i class="bx bx-check-circle icon icon-success hidden"></i>
-          <i class="bx bx-x-circle icon icon-fail hidden"></i>
-          <div class="error-message"></div>
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Form Page</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;700;900&display=swap" rel="stylesheet" />
+  <link href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="./css/form.css" />
+</head>
+
+<body>
+  <form class="form signin " novalidate>
+    <div class="title">SIGN IN</div>
+    <div class="input-outer">
+      <div class="input-container">
+        <input type="text" id="signin-userid" name="userid" required />
+        <label for="signin-userid">email</label>
+        <span class="bar"></span>
+        <i class='bx bx-check-circle icon icon-success hidden'></i>
+        <i class='bx bx-x-circle icon icon-fail hidden'></i>
+        <div class="error-message"></div>
+      </div>
+      <div class="input-container">
+        <input type="password" id="signin-password" name="password" required />
+        <label for="signin-password">password</label>
+        <span class="bar"></span>
+        <i class='bx bx-check-circle icon icon-success hidden'></i>
+        <i class='bx bx-x-circle icon icon-fail hidden'></i>
+        <div class="error-message"></div>
       </div>
       <button class="signin button" disabled>SIGN IN</button>
       <div class="link">아직 회원이 아니신가요? <a href="javascript:void(0);">회원가입</a></div>
-    </form>
+  </form>
 
-    <form class="form signup" novalidate>
-      <div class="title">SIGN UP</div>
-      <div class="input-outer">
-        <div class="input-container">
-          <input type="text" id="signup-userid" name="userid" required />
-          <label for="signup-userid">email</label>
-          <span class="bar"></span>
-          <i class="bx bx-check-circle icon icon-success hidden"></i>
-          <i class="bx bx-x-circle icon icon-fail hidden"></i>
-          <div class="error-message"></div>
-        </div>
-        <div class="input-container">
-          <input type="text" id="signup-name" name="username" required />
-          <label for="signup-name">Name</label>
-          <span class="bar"></span>
-          <i class="bx bx-check-circle icon icon-success hidden"></i>
-          <i class="bx bx-x-circle icon icon-fail hidden"></i>
-          <div class="error-message"></div>
-        </div>
-        <div class="input-container">
-          <input type="password" id="signup-password" name="password" required />
-          <label for="signup-password">password</label>
-          <span class="bar"></span>
-          <i class="bx bx-check-circle icon icon-success hidden"></i>
-          <i class="bx bx-x-circle icon icon-fail hidden"></i>
-          <div class="error-message"></div>
-        </div>
-        <div class="input-container" id="confirmPasswordContainer">
-          <input type="password" id="signup-confirm-password" name="confirm_password" required />
-          <label for="signup-confirm-password">Confirm Password</label>
-          <span class="bar"></span>
-          <i class="bx bx-check-circle icon icon-success hidden"></i>
-          <i class="bx bx-x-circle icon icon-fail hidden"></i>
-          <div class="error-message"></div>
-        </div>
+  <form class="form signup hidden" novalidate>
+    <div class="title">SIGN UP</div>
+    <div class="input-outer">
+
+      <div class="input-container">
+        <input type="text" id="signup-userid" name="userid" required />
+        <label for="signup-userid">email</label>
+        <span class="bar"></span>
+        <i class='bx bx-check-circle icon icon-success hidden'></i>
+        <i class='bx bx-x-circle icon icon-fail hidden'></i>
+        <div class="error-message"></div>
       </div>
-      <button class="signup button" disabled>SIGN UP</button>
-      <div class="link">이미 회원이신가요? <a href="javascript:void(0);">로그인</a></div>
-    </form>
+      <div class="input-container">
+        <input type="text" id="signup-name" name="username" required />
+        <label for="signup-name">Name</label>
+        <span class="bar"></span>
+        <i class='bx bx-check-circle icon icon-success hidden'></i>
+        <i class='bx bx-x-circle icon icon-fail hidden'></i>
+        <div class="error-message"></div>
+      </div>
+      <div class="input-container">
+        <input type="password" id="signup-password" name="password" required />
+        <label for="signup-password">password</label>
+        <span class="bar"></span>
+        <i class='bx bx-check-circle icon icon-success hidden'></i>
+        <i class='bx bx-x-circle icon icon-fail hidden'></i>
+        <div class="error-message"></div>
+      </div>
+      <div class="input-container" id="confirmPasswordContainer">
+        <input type="password" id="signup-confirm-password" name="confirm_password" required />
+        <label for="signup-confirm-password">Confirm Password</label>
+        <span class="bar"></span>
+        <i class='bx bx-check-circle icon icon-success hidden'></i>
+        <i class='bx bx-x-circle icon icon-fail hidden'></i>
+        <div class="error-message"></div>
+      </div>
+    </div>
+    <button class="signup button" disabled>SIGN UP</button>
+    <div class="link">이미 회원이신가요? <a href="javascript:void(0);">로그인</a></div>
+  </form>
 
-    <script src="../node_modules/object-hash/dist/object_hash.js" type="text/javascript"></script>
-    <script src="./js/form.js"></script>
-  </body>
+  <script src="../node_modules/object-hash/dist/object_hash.js" type="text/javascript"></script>
+  <script src="./js/form.js"></script>
+</body>
+
 </html>

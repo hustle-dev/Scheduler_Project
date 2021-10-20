@@ -1,3 +1,7 @@
+// eslint-disable-next-line no-undef
+const hashfunc = objectHash.sha1;
+// console.log(hash({ userid: 'sonwj0915@naver.com', password: '123456' }));
+
 // state object
 const VALID_PATTERNS = {
   userid: /^[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*@[0-9a-zA-Z]([-_.]?[0-9a-zA-Z])*\.[a-zA-Z]{2,3}$/i,
@@ -20,13 +24,11 @@ const ERROR_MESSAGES = {
   confirm_password: '패스워드가 일치하지 않습니다.'
 };
 
-/** @type {validateAllsignin} */
 const validateAllsignin = {
   userid: false,
   password: false
 };
 
-/** @type {validateAllsignup} */
 const validateAllsignup = {
   userid: false,
   password: false,
@@ -37,9 +39,7 @@ const validateAllsignup = {
 // DOM Nodes
 const $signinForm = document.querySelector('.form.signin');
 const $signupForm = document.querySelector('.form.signup');
-
-// helper
-// const hashfunc =
+const [$signupLink, $signinLink] = document.querySelectorAll('.link > a');
 
 const toggleValidIcon = ($icon, bool) => {
   $icon.classList.toggle('hidden', bool);
@@ -118,12 +118,42 @@ window.addEventListener('load', () => {
   );
 });
 
-// $signinForm.oninput = validCheckAction;
-// $signupForm.oninput = validCheckAction;
-[$signinForm.oninput, $signupForm.oninput] = [validCheckAction, validCheckAction];
+$signinForm.oninput = validCheckAction;
+$signupForm.oninput = validCheckAction;
 
-$signinForm.onsubmit = e => {};
-$signupForm.onsubmit = e => {
-  e.currentTarget.querySelectorAll('input');
-  localStorage.setItem();
+$signinForm.onsubmit = e => {
+  e.preventDefault();
+
+  const [{ value: userid }, { value: password }] = e.currentTarget.querySelectorAll('input');
+
+  // console.log(JSON.parse(localStorage.getItem('users'))[hashfunc({ userid, password })]);
+  if (!JSON.parse(localStorage.getItem('users'))[hashfunc({ userid, password })]) return;
+
+  // 로그인 성공
+
+  // 데이터 옮겨주고 url 이동
 };
+$signupForm.onsubmit = e => {
+  e.preventDefault();
+  const [{ value: userid }, { value: name }, { value: password }, _] =
+    e.currentTarget.querySelectorAll('input');
+
+  localStorage.setItem(
+    'users',
+    JSON.stringify({
+      [hashfunc({ userid, password })]: {
+        userid,
+        password,
+        name,
+        todolist: []
+      }
+    })
+  );
+};
+
+const toggleLink = () => {
+  [$signinForm, $signupForm].forEach($form => $form.classList.toggle('hidden'));
+};
+
+$signupLink.onclick = toggleLink;
+$signinLink.onclick = toggleLink;
