@@ -69,7 +69,7 @@ button {
 }
 .calendar-week button {
   border-bottom: 1px solid grey !important;
-  text-align: center;
+  /* text-align: center; */
   font-weight: bold;
   font-size: 28px;
   line-height: 10px;
@@ -88,7 +88,6 @@ button {
   padding: 0;
   /* position: relative; */
 
-  position: relative;
   text-align: start;
 
   color: #5a5a5a;
@@ -99,6 +98,11 @@ button {
   padding: 6px 50px 60px 0px;
   position: relative;
   z-index: 10;
+}
+.calendar-date button time:hover {
+  background: rgba(243, 243, 243, 0.2);
+  box-shadow: inset 1px 1px 5px rgba(0, 0, 0, 0.25);
+  transition: ease-out;
 }
 .calendar-date .today {
   font-weight: 400;

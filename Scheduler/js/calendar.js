@@ -159,7 +159,7 @@ $overlay.onclick = () => {
   $overlay.style.display = 'none';
 };
 
-const render = date => {
+const render = () => {
   $todoList.innerHTML = todos
     .map(
       ({ id, content, completed }) => `
@@ -176,6 +176,7 @@ const render = date => {
 
 const setTodo = newTodo => {
   todos = newTodo;
+  console.log(todos);
   render();
 };
 
@@ -183,6 +184,8 @@ $calendarDate.onclick = e => {
   const targetDateTime = e.target.closest('time').getAttribute('datetime');
   if (userInfo.todolist[`${targetDateTime}`]) {
     setTodo(userInfo.todolist[`${targetDateTime}`]);
+  } else {
+    setTodo([]);
   }
   $yearMonth.textContent = targetDateTime;
 
