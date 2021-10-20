@@ -4,7 +4,7 @@ const $popup = document.querySelector('.popup');
 const $overlay = document.querySelector('.overlay');
 
 // Variables ------------------------------
-const selectedYear = new Date().getFullYear();
+let selectedYear = new Date().getFullYear();
 let selectedMonth = new Date().getMonth();
 
 // const userData = {
@@ -62,8 +62,6 @@ const render2 = () => {
   const nextMonth = selectedMonth === 11 ? 0 : selectedMonth + 1;
   const lengthOfNextMonth = 6 - new Date(selectedYear, selectedMonth + 1, 0).getDay();
 
-  // 이거 활용할끄야
-  // const getMonth = month => new Date(0, month).toLocaleString('en-us', { month: 'short' });
   const dateOfPrevMonth = {
     year: prevYear,
     month: convertToRegularMonth.makeNum(prevMonth),
@@ -102,31 +100,31 @@ const render2 = () => {
 // Event bindings --------------------------------------
 window.addEventListener('DOMContentLoaded', render2);
 
-// document.querySelector('.move-prev-months').onclick = () => {
-//   if (selectedMonth === 0) {
-//     selectedMonth = 11;
-//     selectedYear -= 1;
-//   } else selectedMonth -= 1;
+document.querySelector('.move-prev-months').onclick = () => {
+  if (selectedMonth === 0) {
+    selectedMonth = 11;
+    selectedYear -= 1;
+  } else selectedMonth -= 1;
 
-//   render2();
-// };
-
-// document.querySelector('.move-next-months').onclick = () => {
-//   if (selectedMonth === 11) {
-//     selectedMonth = 0;
-//     selectedYear += 1;
-//   } else selectedMonth += 1;
-
-//   render2();
-// };
-
-document.querySelector('.calendar').onclick = () => {
-  // if (!e.target.matches('button')) return;
-  if (Math.abs(11 - selectedMonth) === 0 || Math.abs(11 - selectedMonth) === 11) {
-    selectedMonth = Math.abs(selectedMonth - 11);
-  } else selectedMonth += 1;
   render2();
 };
+
+document.querySelector('.move-next-months').onclick = () => {
+  if (selectedMonth === 11) {
+    selectedMonth = 0;
+    selectedYear += 1;
+  } else selectedMonth += 1;
+
+  render2();
+};
+
+// document.querySelector('.calendar').onclick = () => {
+//   // if (!e.target.classList.contains('move-prev-month') || !e.target.classList.contains('next-prev-month)) return;
+//   if (Math.abs(11 - selectedMonth) === 0 || Math.abs(11 - selectedMonth) === 11) {
+//     selectedMonth = Math.abs(selectedMonth - 11);
+//   } else selectedMonth += 1;
+//   render2();
+// };
 
 const displayPopup = () => {
   $popup.style.display = 'block';
