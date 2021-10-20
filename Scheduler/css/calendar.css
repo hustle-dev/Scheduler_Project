@@ -97,6 +97,11 @@ button {
   padding: 6px 50px 60px 0px;
   /* z-index: -1; */
 }
+.calendar-date button time:hover {
+  background: rgba(243, 243, 243, 0.2);
+  box-shadow: inset 1px 1px 5px rgba(0, 0, 0, 0.25);
+  transition: ease-out;
+}
 .calendar-date .today {
   font-weight: 400;
   color: #45f542;
