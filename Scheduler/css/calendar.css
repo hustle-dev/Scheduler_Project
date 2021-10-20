@@ -78,7 +78,7 @@ button {
   left: 0;
   background: none;
   color: #5a5a5a;
-  position: relative;
+  /* position: relative; */
 }
 
 .calendar-date button {
@@ -94,7 +94,9 @@ button {
 }
 .calendar-date button time {
   display: block;
+  background-color: transparent;
   padding: 6px 50px 60px 0px;
+  /* z-index: -1; */
 }
 .calendar-date .today {
   font-weight: 400;
@@ -127,9 +129,21 @@ button {
 
 .todo {
   display: inline-block;
-  /* position: absolute; */
-  top: 10px;
-  background-color: lime;
+  width: 100%;
+
+  background-color: yellow;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+
+  color: black;
+  font-weight: bold;
+
+  position: absolute;
+  top: 30px;
+  left: 0px;
+  /* top: 30px;
+  left: 0px; */
 }
 
 /* pop-up */
