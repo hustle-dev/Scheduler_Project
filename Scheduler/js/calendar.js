@@ -1,11 +1,15 @@
-import { userKey, userInfo } from './store.js';
+const signupUserInfo = JSON.parse(localStorage.getItem('users'));
+console.log(signupUserInfo);
 
+let userKey;
 let todos = [];
-const allTodos = userInfo.todolist;
+let userInfo = {};
+let allTodos = {};
 
 // DOM Nodes
 
 const $calendarDate = document.querySelector('.calendar-date');
+const $loginSuccessSign = document.querySelector('.login-success-sign');
 
 const $yearMonth = document.querySelector('.year-month');
 const $newTodo = document.querySelector('.new-todo');
@@ -104,18 +108,28 @@ const render2 = () => {
 };
 
 // Event bindings --------------------------------------
-window.addEventListener('DOMContentLoaded', render2);
+
+window.addEventListener('DOMContentLoaded', () => {
+  userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+
+  userKey = sessionStorage.getItem('userKey');
+  allTodos = userInfo.todolist;
+  console.log(userInfo);
+  $loginSuccessSign.textContent = `${userInfo.name}님 안녕하세요`;
+  render2();
+});
 
 window.addEventListener('beforeunload', event => {
   event.preventDefault();
 
   localStorage.setItem(
-    'ho',
+    'users',
     JSON.stringify({
-      name: 'home',
-      todolist: allTodos
+      ...signupUserInfo,
+      [`${userKey}`]: { ...userInfo, todolist: { ...allTodos } }
     })
   );
+  sessionStorage.setItem('userInfo', JSON.stringify({ ...userInfo, todolist: allTodos }));
   event.returnValue = '';
 });
 
@@ -150,6 +164,7 @@ const displayPopup = () => {
 const updateAllTodos = () => {
   if (todos.length === 0) delete allTodos[`${document.querySelector('.year-month').textContent}`];
   if (todos.length !== 0) allTodos[`${document.querySelector('.year-month').textContent}`] = todos;
+  console.log(allTodos);
 };
 
 $overlay.onclick = () => {
