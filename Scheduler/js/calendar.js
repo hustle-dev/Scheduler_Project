@@ -19,6 +19,8 @@ const $yearMonth = document.querySelector('.year-month');
 const $newTodo = document.querySelector('.new-todo');
 const $todoList = document.querySelector('.todo-list');
 
+const $logout = document.querySelector('.logout');
+
 const convertToRegularMonth = (() => {
   const monthStr = [
     'JAN',
@@ -267,4 +269,18 @@ $todoList.onclick = e => {
   if (!e.target.classList.contains('destroy')) return;
 
   removeTodo(e.target.closest('li').dataset.id);
+};
+
+// ------------- logout -------------------
+
+$logout.onclick = () => {
+  localStorage.setItem(
+    'users',
+    JSON.stringify({
+      ...signupUserInfo,
+      [`${userKey}`]: { ...userInfo, todolist: { ...allTodos } }
+    })
+  );
+  sessionStorage.setItem('userInfo', JSON.stringify({ ...userInfo, todolist: allTodos }));
+  window.location.href = './';
 };
