@@ -167,6 +167,7 @@ $signupForm.onsubmit = e => {
   localStorage.setItem(
     'users',
     JSON.stringify({
+      ...JSON.parse(localStorage.getItem('users')),
       [hashfunc({ userid, password })]: {
         name,
         todolist: {}
