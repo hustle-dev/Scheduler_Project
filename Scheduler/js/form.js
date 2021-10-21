@@ -35,6 +35,9 @@ const $signinForm = document.querySelector('.form.signin');
 const $signupForm = document.querySelector('.form.signup');
 const [$signupLink, $signinLink] = document.querySelectorAll('.link > a');
 
+// 임시 DOM Nodes
+const $signupUserid = document.getElementById('signup-userid');
+
 const toggleValidIcon = ($icon, bool) => {
   $icon.classList.toggle('hidden', bool);
 };
@@ -44,16 +47,9 @@ const isAllValidate = checkValidObj => Object.values(checkValidObj).every(el => 
 const ActiveSubmit = ($submitButton, isAllValidate) => {
   $submitButton.toggleAttribute('disabled', !isAllValidate);
 };
-// const ActiveSubmit = ($submitButton, checkValidObj) => {
-//   $submitButton.toggleAttribute('disabled', !Object.values(checkValidObj).every(el => el));
-// };
 
 const makeErrorMessage = (value, prop) =>
   VALID_PATTERNS[prop].test(value) ? '' : ERROR_MESSAGES[prop];
-
-/**
- * 실시간 확인 하는 부분 더러우니 수정!
- */
 
 const liveCheckConfirmPassword = (() => {
   const $container = document.getElementById('confirmPasswordContainer');
@@ -77,19 +73,11 @@ const toggleLink = () => {
   [$signinForm, $signupForm].forEach($form => $form.classList.toggle('hidden'));
 };
 
-// 회원가입 userid 갱신
-const writeUserid = userid => {
-  document.getElementById('signup-userid').value = userid;
-};
-
 const autoWriteUseridinSignupFrom = (e, userid) => {
-  document.getElementById('signup-userid').value = userid;
   if (!e.target.classList.contains('toast-link')) return;
   toggleLink();
-  writeUserid(userid);
+  $signupUserid.value = userid;
 };
-
-// const signupAction = (e, checkValidObj) => {};
 
 // Event handler
 const validCheckAction = ($target, checkValidObj) => {
@@ -123,12 +111,20 @@ $signinForm.oninput = e => {
 };
 
 $signupForm.oninput = e => {
-  console.log($signupForm);
-  console.log(e.target);
   validCheckAction(e.target, validateAllsignup);
   if (e.target.getAttribute('name') === 'password') liveCheckConfirmPassword(e.target.value);
 
   ActiveSubmit(e.currentTarget.querySelector('.button'), isAllValidate(validateAllsignup));
+};
+
+const toastTitle = {
+  signinFail: '존재하지 않는 회원입니다.',
+  signupSuccess: '회원가입에 성공하셨습니다!'
+};
+
+const toastContent = {
+  signinFail: `로 <a class="toast-link" href="javascript:void(0);">회원가입</a>을 진행하시겠습니까?`,
+  signupSuccess: '로그인 해주세요!'
 };
 
 $signinForm.onsubmit = e => {
@@ -136,7 +132,6 @@ $signinForm.onsubmit = e => {
 
   const [{ value: userid }, { value: password }] = e.currentTarget.querySelectorAll('input');
 
-  // console.log(JSON.parse(localStorage.getItem('users'))[hashfunc({ userid, password })]);
   const userObj = JSON.parse(localStorage.getItem('users'));
   const userKey = hashfunc({ userid, password });
 
@@ -144,16 +139,23 @@ $signinForm.onsubmit = e => {
   if (userObj[userKey]) {
     sessionStorage.setItem('userKey', hashfunc({ userid, password }));
     sessionStorage.setItem('userInfo', JSON.stringify(userObj[userKey]));
-    window.location.href = './calendar.html';
+
     // 링크 이동
+    $signinForm.querySelectorAll('input').forEach($input => {
+      $input.value = '';
+    });
+    $signinForm.querySelectorAll('.icon').forEach($icon => $icon.classList.add('hidden'));
+
+    window.location.href = './calendar.html';
   } else {
     // 로그인 실패
-    createToast(userid);
-    document.querySelector('.toast').onclick = e => autoWriteUseridinSignupFrom(e, userid);
+    createToast('fail', toastTitle.signinFail, userid + toastContent.signinFail);
+    document.querySelector('.toast').onclick = e => {
+      autoWriteUseridinSignupFrom(e, userid);
+      validCheckAction($signupUserid, validateAllsignup);
+    };
     removeToast();
   }
-
-  // 데이터 옮겨주고 url 이동
 };
 
 $signupForm.onsubmit = e => {
@@ -170,6 +172,17 @@ $signupForm.onsubmit = e => {
       }
     })
   );
+
+  // toast창 띄우기
+  createToast('success', toastTitle.signupSuccess, toastContent.signupSuccess);
+  removeToast();
+
+  // value값 초기화 후 sign in으로 이동
+  document.querySelectorAll('input').forEach($input => {
+    $input.value = '';
+  });
+  toggleLink();
+  $signupForm.querySelectorAll('.icon').forEach($icon => $icon.classList.add('hidden'));
 };
 
 $signupLink.onclick = toggleLink;

@@ -1,10 +1,10 @@
-const createToast = userid => {
+const createToast = (type, title, content) => {
   const $toast = document.createElement('div');
-  $toast.className = 'toast';
+  $toast.className = `toast ${type}`;
   $toast.innerHTML = `
-        <h3 class="toast-heading">존재하지 않는 회원입니다.</h3>
+        <h3 class="toast-heading">${title}</h3>
           <div class="toast-message"> 
-            <p>'${userid}'로 <a class="toast-link" href="javascript:void(0);">회원가입</a>을 진행하시겠습니까?</p>
+            <p>${content}</p>
           </div>
         <a class="toast-close">&times;</a>
   `;
