@@ -63,8 +63,8 @@ const render2 = () => {
   //   );
   // };
 
-  // const changeMonth = target => {
-  //   target.classList.contains('move-prev-months')
+  // const changeMonth = button => {
+  //   button.classList.contains('move-prev-months')
   // }
   const prevYear = state.year - !state.month;
   const prevMonth = state.month === 0 ? 11 : state.month - 1;
