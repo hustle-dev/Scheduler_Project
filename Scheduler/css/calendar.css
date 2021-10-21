@@ -11,12 +11,13 @@ body {
 
 .logout {
   position: absolute;
-  z-index: 1000;
+  z-index: 10;
   top: 20px;
   right: 20px;
   padding: 10px;
   border-radius: 5px;
   font-weight: 700;
+  font-size: 1rem;
   background: var(--background-color);
 }
 
@@ -29,10 +30,11 @@ button {
 }
 /* calendar */
 .login-success-sign {
-  font-weight: 500;
-  font-size: 26px;
+  font-weight: 400;
+  font-size: 20px;
   text-align: right;
   padding-bottom: 2rem;
+
   /* margin: 0 auto; */
   color: #5a5a5a;
 }
@@ -40,6 +42,7 @@ button {
   position: relative;
   /* height: 80vh; */
   width: 1200px;
+  height: 750px;
   margin: 0 auto;
   padding: 10px 100px;
 
@@ -63,6 +66,14 @@ button {
   font-size: 20px;
   line-height: 23px;
 }
+
+.calendar-week {
+  font-weight: bold;
+  font-size: 1.2rem;
+  padding-bottom: 5px;
+  text-align: center;
+}
+
 .calendar-week,
 .calendar-date {
   display: grid;
@@ -110,7 +121,7 @@ button {
 .calendar-date button time {
   display: block;
   background-color: transparent;
-  padding: 6px 50px 60px 0px;
+  padding: 6px 50px 65px 6px;
   position: relative;
   z-index: 10;
 }
@@ -157,18 +168,23 @@ button {
 
   position: absolute;
   top: 30px;
-  left: 0px;
+  left: 5px;
   z-index: -10;
 }
 
 .todo-item {
   margin-bottom: 5px;
   position: relative;
-  background-color: yellow;
+  background-color: #003049;
   text-overflow: ellipsis;
   white-space: nowrap;
   overflow: hidden;
   z-index: -10;
+  color: #ffffff;
+  border-radius: 4px;
+  line-height: 1.5rem;
+  padding-left: 10px;
+  font-weight: lighter;
 }
 
 /* pop-up */

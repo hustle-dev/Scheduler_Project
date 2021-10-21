@@ -3,19 +3,16 @@ let userInfo = {};
 let userTodos = {};
 let todayTodos = [];
 
+let [currentYear, currentMonth] = [new Date().getFullYear(), new Date().getMonth()];
+
 // DOM Node
+const $logout = document.querySelector('.logout');
+const $calendarDate = document.querySelector('.calendar-date');
+const $popup = document.querySelector('.popup');
 const $yearMonth = document.querySelector('.year-month');
 const $newTodo = document.querySelector('.new-todo');
 const $todoList = document.querySelector('.todo-list');
-const $logout = document.querySelector('.logout');
-const $popup = document.querySelector('.popup');
 const $overlay = document.querySelector('.overlay');
-
-// ---------------------------------------------------------------------
-
-const $calendarDate = document.querySelector('.calendar-date');
-
-let [currentYear, currentMonth] = [new Date().getFullYear(), new Date().getMonth()];
 
 const convertMonth = (() => {
   const monthNames = [
@@ -110,47 +107,6 @@ const renderCalendar = () => {
     .join('');
 };
 
-// Event bindings --------------------------------------
-
-document.querySelector('.move-prev-months').onclick = () => {
-  currentMonth === 0 && (currentYear -= 1);
-  currentMonth = currentMonth === 0 ? 11 : currentMonth - 1;
-
-  renderCalendar();
-};
-
-document.querySelector('.move-next-months').onclick = () => {
-  currentMonth === 11 && (currentYear += 1);
-  currentMonth = currentMonth === 11 ? 0 : currentMonth + 1;
-
-  renderCalendar();
-};
-
-// ------------------------------------------------------------
-window.addEventListener('DOMContentLoaded', () => {
-  userKey = sessionStorage.getItem('userKey');
-  userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
-  userTodos = userInfo.todolist;
-  document.querySelector('.login-success-sign').textContent = `${userInfo.name}님 안녕하세요`;
-  renderCalendar();
-});
-
-window.addEventListener('beforeunload', e => {
-  e.preventDefault();
-
-  localStorage.setItem(
-    'users',
-    JSON.stringify({
-      ...JSON.parse(localStorage.getItem('users')),
-      [userKey]: { ...userInfo, todolist: { ...userTodos } }
-    })
-  );
-  sessionStorage.setItem('userInfo', JSON.stringify({ ...userInfo, todolist: userTodos }));
-  e.returnValue = '';
-});
-
-// ---------------------------------------------------------------------------------------------
-
 const displayTodoList = bool => {
   $popup.style.display = bool ? 'initial' : 'none';
   $overlay.style.display = bool ? 'initial' : 'none';
@@ -160,12 +116,6 @@ const updateUserTodos = () => {
   todayTodos.length === 0
     ? delete userTodos[`${$yearMonth.textContent}`]
     : (userTodos[`${$yearMonth.textContent}`] = todayTodos);
-};
-
-$overlay.onclick = () => {
-  displayTodoList(false);
-  updateUserTodos(todayTodos);
-  renderCalendar();
 };
 
 const renderTodoList = () => {
@@ -188,17 +138,6 @@ const setTodo = newTodo => {
   renderTodoList();
 };
 
-$calendarDate.onclick = e => {
-  const targetDateTime = e.target.closest('time').getAttribute('datetime');
-  setTodo(userTodos[targetDateTime] || []);
-
-  $yearMonth.textContent = targetDateTime;
-
-  displayTodoList(true);
-};
-
-// ---------------------------------------------------------------------------------------------
-
 const generateId = () => Math.max(...todayTodos.map(todo => todo.id), 0) + 1;
 
 const addTodo = content => {
@@ -213,6 +152,57 @@ const toggleTodoCompleted = id => {
 
 const removeTodo = id => {
   setTodo(todayTodos.filter(todo => todo.id !== +id));
+};
+
+window.addEventListener('DOMContentLoaded', () => {
+  userKey = sessionStorage.getItem('userKey');
+  userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+  userTodos = userInfo.todolist;
+  document.querySelector('.login-success-sign').textContent = `${userInfo.name}님 안녕하세요`;
+  renderCalendar();
+});
+
+window.addEventListener('beforeunload', e => {
+  e.preventDefault();
+
+  localStorage.setItem(
+    'users',
+    JSON.stringify({
+      ...JSON.parse(localStorage.getItem('users')),
+      [userKey]: { ...userInfo, todolist: { ...userTodos } }
+    })
+  );
+  sessionStorage.setItem('userInfo', JSON.stringify({ ...userInfo, todolist: userTodos }));
+  e.returnValue = '';
+});
+
+document.querySelector('.move-prev-months').onclick = () => {
+  currentMonth === 0 && (currentYear -= 1);
+  currentMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+
+  renderCalendar();
+};
+
+document.querySelector('.move-next-months').onclick = () => {
+  currentMonth === 11 && (currentYear += 1);
+  currentMonth = currentMonth === 11 ? 0 : currentMonth + 1;
+
+  renderCalendar();
+};
+
+$overlay.onclick = () => {
+  displayTodoList(false);
+  updateUserTodos(todayTodos);
+  renderCalendar();
+};
+
+$calendarDate.onclick = e => {
+  const targetDateTime = e.target.closest('time').getAttribute('datetime');
+  setTodo(userTodos[targetDateTime] || []);
+
+  $yearMonth.textContent = targetDateTime;
+
+  displayTodoList(true);
 };
 
 $newTodo.onkeyup = e => {
