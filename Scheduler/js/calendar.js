@@ -1,5 +1,5 @@
 const signupUserInfo = JSON.parse(localStorage.getItem('users'));
-console.log(signupUserInfo);
+// console.log(signupUserInfo);
 
 let userKey;
 let todos = [];
@@ -127,7 +127,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   userKey = sessionStorage.getItem('userKey');
   allTodos = userInfo.todolist;
-  console.log(userInfo);
+  // console.log(userInfo);
   $loginSuccessSign.textContent = `${userInfo.name}님 안녕하세요`;
   render2();
 });
@@ -190,7 +190,7 @@ const displayPopup = () => {
 const updateAllTodos = () => {
   if (todos.length === 0) delete allTodos[`${document.querySelector('.year-month').textContent}`];
   if (todos.length !== 0) allTodos[`${document.querySelector('.year-month').textContent}`] = todos;
-  console.log(allTodos);
+  // console.log(allTodos);
 };
 
 $overlay.onclick = () => {
