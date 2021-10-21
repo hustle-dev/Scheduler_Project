@@ -113,7 +113,9 @@ const render2 = () => {
     if (Object.keys(allTodos).includes(data.dateTime)) {
       data.firstElementChild.innerHTML = `<div class="todo-item">${
         allTodos[data.dateTime][0].content
-      }</div><div class="todo-item">${allTodos[data.dateTime][1].content}</div>`;
+      }</div><div class="todo-item">${
+        allTodos[data.dateTime].length >= 2 ? allTodos[data.dateTime][1].content : ''
+      }</div>`;
     }
   });
 };
