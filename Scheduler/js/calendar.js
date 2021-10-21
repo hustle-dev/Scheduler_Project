@@ -1,14 +1,14 @@
 const signupUserInfo = JSON.parse(localStorage.getItem('users'));
-// console.log(signupUserInfo);
 
 let userKey;
 let todos = [];
+let userInfo = {};
+let allTodos = {};
+
 const state = {
   year: new Date().getFullYear(),
   month: new Date().getMonth()
 };
-let userInfo = {};
-let allTodos = {};
 
 // DOM Nodes
 
@@ -54,16 +54,6 @@ const createMonthDate = (
 )();
 
 const render2 = () => {
-  // const changeCalendar = backAndForth => {
-  //   const date = new Date(
-  //     state.year - !state.month + (state.month === 11),
-  //     state.month + backAndForth
-  //   );
-  // };
-
-  // const changeMonth = target => {
-  //   target.classList.contains('move-prev-months')
-  // }
   const prevYear = state.year - !state.month;
   const prevMonth = state.month === 0 ? 11 : state.month - 1;
   const firstDayOfMonth = new Date(state.year, state.month, 1).getDay();
@@ -127,12 +117,12 @@ window.addEventListener('DOMContentLoaded', () => {
 
   userKey = sessionStorage.getItem('userKey');
   allTodos = userInfo.todolist;
-  // console.log(userInfo);
+
   $loginSuccessSign.textContent = `${userInfo.name}님 안녕하세요`;
   render2();
 });
 
-window.addEventListener('beforeunload', event => {
+window.onbeforeunload = event => {
   event.preventDefault();
 
   localStorage.setItem(
@@ -144,7 +134,7 @@ window.addEventListener('beforeunload', event => {
   );
   sessionStorage.setItem('userInfo', JSON.stringify({ ...userInfo, todolist: allTodos }));
   event.returnValue = '';
-});
+};
 
 document.querySelector('.move-prev-months').onclick = () => {
   if (state.month === 0) {
@@ -164,21 +154,6 @@ document.querySelector('.move-next-months').onclick = () => {
   render2();
 };
 
-// document.querySelector('.calendar').onclick = e => {
-//   if (
-//     !e.target.classList.contains('move-prev-months') ||
-//     !e.target.classList.contains('move-next-months')
-//   )
-//     return;
-//   let count = 0;
-//   if (Math.abs(11 - state.month) === 0 || Math.abs(state.month - 11) === 11) {
-//     if(count++ > 1) break;
-//     state.month = Math.abs(11 - state.month);
-//   }
-//   render2();
-// };
-// ---------------------------------------------------------------------------------------------
-
 const $popup = document.querySelector('.popup');
 const $overlay = document.querySelector('.overlay');
 
@@ -190,7 +165,6 @@ const displayPopup = () => {
 const updateAllTodos = () => {
   if (todos.length === 0) delete allTodos[`${document.querySelector('.year-month').textContent}`];
   if (todos.length !== 0) allTodos[`${document.querySelector('.year-month').textContent}`] = todos;
-  // console.log(allTodos);
 };
 
 $overlay.onclick = () => {
@@ -232,8 +206,6 @@ $calendarDate.onclick = e => {
 
   displayPopup();
 };
-
-// ---------------------------------------------------------------------------------------------
 
 const generateId = () => Math.max(...todos.map(todo => todo.id), 0) + 1;
 
