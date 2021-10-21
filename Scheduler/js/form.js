@@ -1,4 +1,3 @@
-import { setUserKey, setUserInfo } from './store.js';
 import { createToast, removeToast } from './toast.js';
 
 // eslint-disable-next-line no-undef
@@ -143,8 +142,9 @@ $signinForm.onsubmit = e => {
 
   // 로그인 성공
   if (userObj[userKey]) {
-    setUserKey(hashfunc({ userid, password }));
-    setUserInfo(userObj[userKey]);
+    sessionStorage.setItem('userKey', hashfunc({ userid, password }));
+    sessionStorage.setItem('userInfo', JSON.stringify(userObj[userKey]));
+    window.location.href = './calendar.html';
     // 링크 이동
   } else {
     // 로그인 실패
@@ -154,7 +154,6 @@ $signinForm.onsubmit = e => {
   }
 
   // 데이터 옮겨주고 url 이동
-  window.location.href = './calendar.html';
 };
 
 $signupForm.onsubmit = e => {
