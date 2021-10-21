@@ -1,48 +1,49 @@
 <!DOCTYPE html>
 <html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CalendarPage</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="./css/calendar.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;900&display=swap"
+      rel="stylesheet"
+    />
+    <link href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="./css/calendar.css" />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CalendarPage</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="./css/calendar.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;900&display=swap" rel="stylesheet" />
-  <link href="https://unpkg.com/boxicons@latest/css/boxicons.min.css" rel="stylesheet" />
-  <link rel="stylesheet" href="./css/calendar.css" />
-</head>
-
-<body>
-  <button class="logout">로그아웃</button>
-  <div class="calendar">
-    <h2 class="calendar-month">OCT <span> 2021</span></h2>
-    <p class="login-success-sign">손원재님, 안녕하세요</p>
-    <div class="calendar-week">
-      <div class="sunday">SUN</div>
-      <div>MON</div>
-      <div>TUE</div>
-      <div>WED</div>
-      <div>THU</div>
-      <div>FRI</div>
-      <div>SAT</div>
+  <body>
+    <button class="logout">로그아웃</button>
+    <div class="calendar">
+      <h2 class="calendar-month">OCT <span> 2021</span></h2>
+      <p class="login-success-sign">손원재님, 안녕하세요</p>
+      <div class="calendar-week">
+        <div class="sunday">SUN</div>
+        <div>MON</div>
+        <div>TUE</div>
+        <div>WED</div>
+        <div>THU</div>
+        <div>FRI</div>
+        <div>SAT</div>
+      </div>
+      <div class="calendar-date"></div>
+      <button class="move-prev-months">◀</button>
+      <button class="move-next-months">▶</button>
     </div>
-    <div class="calendar-date"></div>
-    <button class="move-prev-months">◀</button>
-    <button class="move-next-months">▶</button>
-  </div>
-  <div role="dialog" id="dialog1" aria-labelledby="dialog1_label" aria-modal="true" class="popup">
-    <h2>오늘의 할일</h2>
-    <div class="year-month"></div>
-    <input type="text" class="new-todo" placeholder="할일을 작성해주세요." autofocus />
+    <div role="dialog" id="dialog1" aria-labelledby="dialog1_label" aria-modal="true" class="popup">
+      <h2>오늘의 할일</h2>
+      <div class="year-month"></div>
+      <input type="text" class="new-todo" placeholder="할일을 작성해주세요." autofocus />
 
-    <ul class="todo-list"></ul>
-  </div>
+      <ul class="todo-list"></ul>
+    </div>
 
-  <div class="overlay"></div>
-  <script type="module" src="js/calendar.js"></script>
-  <!-- <script type="module" src="js/todolist.js"></script> -->
-</body>
-
+    <div class="overlay"></div>
+    <script type="module" src="js/calendar.js"></script>
+    <!-- <script type="module" src="js/todolist.js"></script> -->
+  </body>
 </html>

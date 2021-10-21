@@ -5,14 +5,8 @@ let todos = [];
 let userInfo = {};
 let allTodos = {};
 
-const state = {
-  year: new Date().getFullYear(),
-  month: new Date().getMonth()
-};
-
 // DOM Nodes
 
-const $calendarDate = document.querySelector('.calendar-date');
 const $loginSuccessSign = document.querySelector('.login-success-sign');
 
 const $yearMonth = document.querySelector('.year-month');
@@ -20,6 +14,15 @@ const $newTodo = document.querySelector('.new-todo');
 const $todoList = document.querySelector('.todo-list');
 
 const $logout = document.querySelector('.logout');
+
+// ---------------------------------------------
+
+const state = {
+  year: new Date().getFullYear(),
+  month: new Date().getMonth()
+};
+
+const $calendarDate = document.querySelector('.calendar-date');
 
 const convertToRegularMonth = (() => {
   const monthStr = [
@@ -48,10 +51,8 @@ const convertToRegularMonth = (() => {
   };
 })();
 
-// date 채우기 (첫째날, 마지막날 구해서 date 배열 채우기)
 const createMonthDate = (
   () => (length, obj, start) =>
-    // eslint-disable-next-line no-param-reassign
     Array.from({ length }, () => ({ ...obj, date: start++ }))
 )();
 
@@ -65,8 +66,6 @@ const render2 = () => {
   const nextMonth = state.month === 11 ? 0 : state.month + 1;
   const lengthOfNextMonth = 6 - new Date(state.year, state.month + 1, 0).getDay();
 
-  // 이거 활용할끄야
-  // const getMonth = month => new Date(0, month).toLocaleString('en-us', { month: 'short' });
   const dateOfPrevMonth = {
     year: prevYear,
     month: convertToRegularMonth.makeNum(prevMonth),
@@ -112,6 +111,24 @@ const render2 = () => {
   });
 };
 
+document.querySelector('.move-prev-months').onclick = () => {
+  if (state.month === 0) {
+    state.month = 11;
+    state.year -= 1;
+  } else state.month -= 1;
+
+  render2();
+};
+
+document.querySelector('.move-next-months').onclick = () => {
+  if (state.month === 11) {
+    state.month = 0;
+    state.year += 1;
+  } else state.month += 1;
+
+  render2();
+};
+
 // Event bindings --------------------------------------
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -136,24 +153,6 @@ window.onbeforeunload = event => {
   );
   sessionStorage.setItem('userInfo', JSON.stringify({ ...userInfo, todolist: allTodos }));
   event.returnValue = '';
-};
-
-document.querySelector('.move-prev-months').onclick = () => {
-  if (state.month === 0) {
-    state.month = 11;
-    state.year -= 1;
-  } else state.month -= 1;
-
-  render2();
-};
-
-document.querySelector('.move-next-months').onclick = () => {
-  if (state.month === 11) {
-    state.month = 0;
-    state.year += 1;
-  } else state.month += 1;
-
-  render2();
 };
 
 const $popup = document.querySelector('.popup');
