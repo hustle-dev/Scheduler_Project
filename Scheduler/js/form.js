@@ -178,7 +178,7 @@ $signupForm.onsubmit = e => {
   removeToast();
 
   // value값 초기화 후 sign in으로 이동
-  $signupForm.querySelectorAll('input').forEach($input => {
+  document.querySelectorAll('input').forEach($input => {
     $input.value = '';
   });
   toggleLink();
