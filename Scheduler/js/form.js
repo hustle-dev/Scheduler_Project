@@ -66,6 +66,7 @@ const liveCheckConfirmPassword = (() => {
     const isValidConfirmPassword = VALID_PATTERNS.confirm_password.test($input.value);
     toggleValidIcon($successIcon, !isValidConfirmPassword);
     toggleValidIcon($failIcon, isValidConfirmPassword);
+    validateAllsignup.confirm_password = isValidConfirmPassword;
   };
 })();
 
@@ -166,6 +167,7 @@ $signupForm.onsubmit = e => {
   localStorage.setItem(
     'users',
     JSON.stringify({
+      ...JSON.parse(localStorage.getItem('users')),
       [hashfunc({ userid, password })]: {
         name,
         todolist: {}
@@ -182,7 +184,7 @@ $signupForm.onsubmit = e => {
     $input.value = '';
   });
   toggleLink();
-  $signupForm.querySelectorAll('.icon').forEach($icon => $icon.classList.add('hidden'));
+  document.querySelectorAll('.icon').forEach($icon => $icon.classList.add('hidden'));
 };
 
 $signupLink.onclick = toggleLink;
