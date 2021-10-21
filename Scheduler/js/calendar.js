@@ -3,6 +3,10 @@ console.log(signupUserInfo);
 
 let userKey;
 let todos = [];
+const state = {
+  year: new Date().getFullYear(),
+  month: new Date().getMonth()
+};
 let userInfo = {};
 let allTodos = {};
 
@@ -49,18 +53,25 @@ const createMonthDate = (
     Array.from({ length }, () => ({ ...obj, date: start++ }))
 )();
 
-// selectedYear , selectedMonth -> 고치기
-let [selectedYear, selectedMonth] = [new Date().getFullYear(), new Date().getMonth()];
-
 const render2 = () => {
-  const prevYear = selectedYear - !selectedMonth;
-  const prevMonth = selectedMonth === 0 ? 11 : selectedMonth - 1;
-  const firstDayOfMonth = new Date(selectedYear, selectedMonth, 1).getDay();
-  const lastDateMonth = new Date(selectedYear, selectedMonth + 1, 0).getDate();
+  // const changeCalendar = backAndForth => {
+  //   const date = new Date(
+  //     state.year - !state.month + (state.month === 11),
+  //     state.month + backAndForth
+  //   );
+  // };
 
-  const nextYear = selectedYear + +(selectedMonth === 11);
-  const nextMonth = selectedMonth === 11 ? 0 : selectedMonth + 1;
-  const lengthOfNextMonth = 6 - new Date(selectedYear, selectedMonth + 1, 0).getDay();
+  // const changeMonth = target => {
+  //   target.classList.contains('move-prev-months')
+  // }
+  const prevYear = state.year - !state.month;
+  const prevMonth = state.month === 0 ? 11 : state.month - 1;
+  const firstDayOfMonth = new Date(state.year, state.month, 1).getDay();
+  const lastDateMonth = new Date(state.year, state.month + 1, 0).getDate();
+
+  const nextYear = state.year + +(state.month === 11);
+  const nextMonth = state.month === 11 ? 0 : state.month + 1;
+  const lengthOfNextMonth = 6 - new Date(state.year, state.month + 1, 0).getDay();
 
   // 이거 활용할끄야
   // const getMonth = month => new Date(0, month).toLocaleString('en-us', { month: 'short' });
@@ -70,8 +81,8 @@ const render2 = () => {
     current: false
   };
   const dateOfThisMonth = {
-    year: selectedYear,
-    month: convertToRegularMonth.makeNum(selectedMonth),
+    year: state.year,
+    month: convertToRegularMonth.makeNum(state.month),
     current: true
   };
   const dateOfNextMonth = {
@@ -87,8 +98,8 @@ const render2 = () => {
   ];
 
   document.querySelector('.calendar-month').innerHTML = `${convertToRegularMonth.makeStr(
-    selectedMonth
-  )}<span>${selectedYear}</span>`;
+    state.month
+  )}<span>${state.year}</span>`;
   $calendarDate.innerHTML = mergeEachMonth
     .map(
       ({ year, month, date, current }) =>
@@ -134,23 +145,36 @@ window.addEventListener('beforeunload', event => {
 });
 
 document.querySelector('.move-prev-months').onclick = () => {
-  if (selectedMonth === 0) {
-    selectedMonth = 11;
-    selectedYear -= 1;
-  } else selectedMonth -= 1;
+  if (state.month === 0) {
+    state.month = 11;
+    state.year -= 1;
+  } else state.month -= 1;
 
   render2();
 };
 
 document.querySelector('.move-next-months').onclick = () => {
-  if (selectedMonth === 11) {
-    selectedMonth = 0;
-    selectedYear += 1;
-  } else selectedMonth += 1;
+  if (state.month === 11) {
+    state.month = 0;
+    state.year += 1;
+  } else state.month += 1;
 
   render2();
 };
 
+// document.querySelector('.calendar').onclick = e => {
+//   if (
+//     !e.target.classList.contains('move-prev-months') ||
+//     !e.target.classList.contains('move-next-months')
+//   )
+//     return;
+//   let count = 0;
+//   if (Math.abs(11 - state.month) === 0 || Math.abs(state.month - 11) === 11) {
+//     if(count++ > 1) break;
+//     state.month = Math.abs(11 - state.month);
+//   }
+//   render2();
+// };
 // ---------------------------------------------------------------------------------------------
 
 const $popup = document.querySelector('.popup');
