@@ -1,6 +1,7 @@
+import { createToast, removeToast } from './toast.js';
+
 // eslint-disable-next-line no-undef
 const hashfunc = objectHash.sha1;
-// console.log(hash({ userid: 'sonwj0915@naver.com', password: '123456' }));
 
 // state object
 const VALID_PATTERNS = {
@@ -8,13 +9,6 @@ const VALID_PATTERNS = {
   password: /^[A-Za-z0-9]{6,12}$/,
   username: /.+/,
   confirm_password: /^$/
-};
-
-const $inputContainer = document.getElementById('confirmPasswordContainer');
-const confirmPasswordObj = {
-  $input: document.getElementById('signup-confirm-password'),
-  $errorMessage: $inputContainer.querySelector('.error-message'),
-  $icon: $inputContainer.querySelectorAll('.icon')
 };
 
 const ERROR_MESSAGES = {
@@ -45,68 +39,73 @@ const toggleValidIcon = ($icon, bool) => {
   $icon.classList.toggle('hidden', bool);
 };
 
-const toggleValidState = (checkValidObj, prop, bool) => {
-  checkValidObj[prop] = bool;
-};
+const isAllValidate = checkValidObj => Object.values(checkValidObj).every(el => el);
 
-const ActiveSubmit = ($submitButton, checkValidObj) => {
-  $submitButton.toggleAttribute('disabled', !Object.values(checkValidObj).every(el => el));
+const ActiveSubmit = ($submitButton, isAllValidate) => {
+  $submitButton.toggleAttribute('disabled', !isAllValidate);
 };
+// const ActiveSubmit = ($submitButton, checkValidObj) => {
+//   $submitButton.toggleAttribute('disabled', !Object.values(checkValidObj).every(el => el));
+// };
 
-const noticeError = (value, prop) => (VALID_PATTERNS[prop].test(value) ? '' : ERROR_MESSAGES[prop]);
-
-const updateConfirmPasswordRegExp = value => {
-  VALID_PATTERNS.confirm_password = new RegExp(`^${value}$`);
-};
+const makeErrorMessage = (value, prop) =>
+  VALID_PATTERNS[prop].test(value) ? '' : ERROR_MESSAGES[prop];
 
 /**
  * 실시간 확인 하는 부분 더러우니 수정!
  */
-const liveCheckConfirmPassword = value => {
-  const [$confirmPasswordSuccessIcon, $confirmPasswordFailIcon] = confirmPasswordObj.$icon;
-  const testConfirmPassword = VALID_PATTERNS.confirm_password.test(confirmPasswordObj.$input.value);
 
-  updateConfirmPasswordRegExp(value);
+const liveCheckConfirmPassword = (() => {
+  const $container = document.getElementById('confirmPasswordContainer');
+  const [$successIcon, $failIcon] = $container.querySelectorAll('.icon');
+  const $input = $container.querySelector('input');
+  const $errorMessage = $container.querySelector('.error-message');
 
-  if (confirmPasswordObj.$input.value === '') return;
+  return value => {
+    VALID_PATTERNS.confirm_password = new RegExp(`^${value}$`);
+    if ($input.value === '') return;
 
-  confirmPasswordObj.$errorMessage.textContent = noticeError(
-    confirmPasswordObj.$input.value,
-    'confirm_password'
-  );
-  toggleValidIcon(
-    $confirmPasswordSuccessIcon,
-    !VALID_PATTERNS.confirm_password.test(confirmPasswordObj.$input.value)
-  );
-  toggleValidIcon(
-    $confirmPasswordFailIcon,
-    VALID_PATTERNS.confirm_password.test(confirmPasswordObj.$input.value)
-  );
+    $errorMessage.textContent = makeErrorMessage($input.value, 'confirm_password');
+
+    const isValidConfirmPassword = VALID_PATTERNS.confirm_password.test($input.value);
+    toggleValidIcon($successIcon, !isValidConfirmPassword);
+    toggleValidIcon($failIcon, isValidConfirmPassword);
+  };
+})();
+
+const toggleLink = () => {
+  [$signinForm, $signupForm].forEach($form => $form.classList.toggle('hidden'));
 };
+
+// 회원가입 userid 갱신
+const writeUserid = userid => {
+  document.getElementById('signup-userid').value = userid;
+};
+
+const autoWriteUseridinSignupFrom = (e, userid) => {
+  document.getElementById('signup-userid').value = userid;
+  if (!e.target.classList.contains('toast-link')) return;
+  toggleLink();
+  writeUserid(userid);
+};
+
+// const signupAction = (e, checkValidObj) => {};
 
 // Event handler
-const validCheckAction = e => {
-  const prop = e.target.getAttribute('name');
-  const { parentNode: $inputContainer, value } = e.target;
+const validCheckAction = ($target, checkValidObj) => {
+  const prop = $target.getAttribute('name');
+  const { parentNode: $inputContainer, value } = $target;
   const [$successIcon, $failIcon] = $inputContainer.querySelectorAll('.icon');
 
-  const isSignup = e.currentTarget.classList.contains('signup');
-
-  const checkValidObj = isSignup ? validateAllsignup : validateAllsignin;
-
-  if (prop === 'password' && isSignup) liveCheckConfirmPassword(value);
-
   // active submit
-  toggleValidIcon($successIcon, !VALID_PATTERNS[prop].test(value));
-  toggleValidIcon($failIcon, VALID_PATTERNS[prop].test(value));
-  toggleValidState(checkValidObj, prop, VALID_PATTERNS[prop].test(value));
-  ActiveSubmit(e.currentTarget.querySelector('.button'), checkValidObj);
+  const isValid = VALID_PATTERNS[prop].test(value);
+  toggleValidIcon($successIcon, !isValid);
+  toggleValidIcon($failIcon, isValid);
 
-  $inputContainer.querySelector('.error-message').textContent = noticeError(value, prop);
+  checkValidObj[prop] = isValid;
+
+  $inputContainer.querySelector('.error-message').textContent = makeErrorMessage(value, prop);
 };
-
-// hash function
-// const hash = (id, password) => {};
 
 /**
  * Event binding
@@ -118,8 +117,19 @@ window.addEventListener('load', () => {
   );
 });
 
-$signinForm.oninput = validCheckAction;
-$signupForm.oninput = validCheckAction;
+$signinForm.oninput = e => {
+  validCheckAction(e.target, validateAllsignin);
+  ActiveSubmit(e.currentTarget.querySelector('.button'), isAllValidate(validateAllsignin));
+};
+
+$signupForm.oninput = e => {
+  console.log($signupForm);
+  console.log(e.target);
+  validCheckAction(e.target, validateAllsignup);
+  if (e.target.getAttribute('name') === 'password') liveCheckConfirmPassword(e.target.value);
+
+  ActiveSubmit(e.currentTarget.querySelector('.button'), isAllValidate(validateAllsignup));
+};
 
 $signinForm.onsubmit = e => {
   e.preventDefault();
@@ -127,32 +137,39 @@ $signinForm.onsubmit = e => {
   const [{ value: userid }, { value: password }] = e.currentTarget.querySelectorAll('input');
 
   // console.log(JSON.parse(localStorage.getItem('users'))[hashfunc({ userid, password })]);
-  if (!JSON.parse(localStorage.getItem('users'))[hashfunc({ userid, password })]) return;
+  const userObj = JSON.parse(localStorage.getItem('users'));
+  const userKey = hashfunc({ userid, password });
 
   // 로그인 성공
+  if (userObj[userKey]) {
+    sessionStorage.setItem('userKey', hashfunc({ userid, password }));
+    sessionStorage.setItem('userInfo', JSON.stringify(userObj[userKey]));
+    window.location.href = './calendar.html';
+    // 링크 이동
+  } else {
+    // 로그인 실패
+    createToast(userid);
+    document.querySelector('.toast').onclick = e => autoWriteUseridinSignupFrom(e, userid);
+    removeToast();
+  }
 
   // 데이터 옮겨주고 url 이동
 };
+
 $signupForm.onsubmit = e => {
   e.preventDefault();
-  const [{ value: userid }, { value: name }, { value: password }, _] =
+  const [{ value: userid }, { value: name }, { value: password }] =
     e.currentTarget.querySelectorAll('input');
 
   localStorage.setItem(
     'users',
     JSON.stringify({
       [hashfunc({ userid, password })]: {
-        userid,
-        password,
         name,
-        todolist: []
+        todolist: {}
       }
     })
   );
-};
-
-const toggleLink = () => {
-  [$signinForm, $signupForm].forEach($form => $form.classList.toggle('hidden'));
 };
 
 $signupLink.onclick = toggleLink;
