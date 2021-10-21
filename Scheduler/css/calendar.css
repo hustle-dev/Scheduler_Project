@@ -6,11 +6,24 @@ body {
   justify-content: center;
   overflow: hidden;
 }
+
+.logout {
+  position: absolute;
+  z-index: 1000;
+  top: 20px;
+  right: 20px;
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: 700;
+  background-color: #e6e6e6;
+}
+
 button {
   margin: 0;
   padding: 0;
   background-color: transparent;
   border: none;
+  cursor: pointer;
 }
 /* calendar */
 .login-success-sign {
