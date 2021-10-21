@@ -253,5 +253,5 @@ $logout.onclick = () => {
     })
   );
   sessionStorage.setItem('userInfo', JSON.stringify({ ...userInfo, todolist: allTodos }));
-  window.location.href = './';
+  window.location.replace('./');
 };
