@@ -1,16 +1,15 @@
-const signupUserInfo = JSON.parse(localStorage.getItem('users'));
-
-let userKey;
-let todos = [];
+let userKey = '';
 let userInfo = {};
-let allTodos = {};
+let userTodos = {};
+let todayTodos = [];
 
 // DOM Node
-const $loginSuccessSign = document.querySelector('.login-success-sign');
 const $yearMonth = document.querySelector('.year-month');
 const $newTodo = document.querySelector('.new-todo');
 const $todoList = document.querySelector('.todo-list');
 const $logout = document.querySelector('.logout');
+const $popup = document.querySelector('.popup');
+const $overlay = document.querySelector('.overlay');
 
 // ---------------------------------------------------------------------
 
@@ -95,12 +94,12 @@ const renderCalendar = () => {
       <button class="${current ? '' : 'other-month'}">
       <time datetime="${datetime}">${date}<div class="todo">
           ${
-            allTodos[datetime]
+            userTodos[datetime]
               ? `<div class="todo-item">
-                  ${allTodos[datetime][0].content}
+                  ${userTodos[datetime][0].content}
                 </div>
                 <div class="todo-item">
-                  ${allTodos[datetime][1] ? allTodos[datetime][1].content : ''}
+                  ${userTodos[datetime][1] ? userTodos[datetime][1].content : ''}
                 </div>`
               : ''
           }
@@ -129,53 +128,48 @@ document.querySelector('.move-next-months').onclick = () => {
 
 // ------------------------------------------------------------
 window.addEventListener('DOMContentLoaded', () => {
-  userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
-
   userKey = sessionStorage.getItem('userKey');
-  allTodos = userInfo.todolist;
-  $loginSuccessSign.textContent = `${userInfo.name}님 안녕하세요`;
+  userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
+  userTodos = userInfo.todolist;
+  document.querySelector('.login-success-sign').textContent = `${userInfo.name}님 안녕하세요`;
   renderCalendar();
 });
 
-window.addEventListener('beforeunload', event => {
-  event.preventDefault();
+window.addEventListener('beforeunload', e => {
+  e.preventDefault();
 
   localStorage.setItem(
     'users',
     JSON.stringify({
-      ...signupUserInfo,
-      [`${userKey}`]: { ...userInfo, todolist: { ...allTodos } }
+      ...JSON.parse(localStorage.getItem('users')),
+      [userKey]: { ...userInfo, todolist: { ...userTodos } }
     })
   );
-  sessionStorage.setItem('userInfo', JSON.stringify({ ...userInfo, todolist: allTodos }));
-  event.returnValue = '';
+  sessionStorage.setItem('userInfo', JSON.stringify({ ...userInfo, todolist: userTodos }));
+  e.returnValue = '';
 });
 
 // ---------------------------------------------------------------------------------------------
 
-const $popup = document.querySelector('.popup');
-const $overlay = document.querySelector('.overlay');
-
-const displayPopup = () => {
-  $popup.style.display = 'block';
-  $overlay.style.display = 'block';
+const displayTodoList = bool => {
+  $popup.style.display = bool ? 'initial' : 'none';
+  $overlay.style.display = bool ? 'initial' : 'none';
 };
 
-const updateAllTodos = () => {
-  if (todos.length === 0) delete allTodos[`${document.querySelector('.year-month').textContent}`];
-  if (todos.length !== 0) allTodos[`${document.querySelector('.year-month').textContent}`] = todos;
+const updateUserTodos = () => {
+  todayTodos.length === 0
+    ? delete userTodos[`${$yearMonth.textContent}`]
+    : (userTodos[`${$yearMonth.textContent}`] = todayTodos);
 };
 
 $overlay.onclick = () => {
-  $popup.style.display = 'none';
-  $overlay.style.display = 'none';
-
-  updateAllTodos(todos);
+  displayTodoList(false);
+  updateUserTodos(todayTodos);
   renderCalendar();
 };
 
-const render = () => {
-  $todoList.innerHTML = todos
+const renderTodoList = () => {
+  $todoList.innerHTML = todayTodos
     .map(
       ({ id, content, completed }) => `
     <li data-id="${id}">
@@ -190,36 +184,35 @@ const render = () => {
 };
 
 const setTodo = newTodo => {
-  todos = newTodo;
-  render();
+  todayTodos = newTodo;
+  renderTodoList();
 };
 
 $calendarDate.onclick = e => {
   const targetDateTime = e.target.closest('time').getAttribute('datetime');
-  if (userInfo.todolist[`${targetDateTime}`]) {
-    setTodo(userInfo.todolist[`${targetDateTime}`]);
-  } else {
-    setTodo([]);
-  }
+  setTodo(userTodos[targetDateTime] || []);
+
   $yearMonth.textContent = targetDateTime;
 
-  displayPopup();
+  displayTodoList(true);
 };
 
 // ---------------------------------------------------------------------------------------------
 
-const generateId = () => Math.max(...todos.map(todo => todo.id), 0) + 1;
+const generateId = () => Math.max(...todayTodos.map(todo => todo.id), 0) + 1;
 
 const addTodo = content => {
-  setTodo([{ id: generateId(), content, completed: false }, ...todos]);
+  setTodo([{ id: generateId(), content, completed: false }, ...todayTodos]);
 };
 
 const toggleTodoCompleted = id => {
-  setTodo(todos.map(todo => (todo.id === +id ? { ...todo, completed: !todo.completed } : todo)));
+  setTodo(
+    todayTodos.map(todo => (todo.id === +id ? { ...todo, completed: !todo.completed } : todo))
+  );
 };
 
 const removeTodo = id => {
-  setTodo(todos.filter(todo => todo.id !== +id));
+  setTodo(todayTodos.filter(todo => todo.id !== +id));
 };
 
 $newTodo.onkeyup = e => {
@@ -242,16 +235,6 @@ $todoList.onclick = e => {
   removeTodo(e.target.closest('li').dataset.id);
 };
 
-// ------------- logout -------------------
-
 $logout.onclick = () => {
-  localStorage.setItem(
-    'users',
-    JSON.stringify({
-      ...signupUserInfo,
-      [`${userKey}`]: { ...userInfo, todolist: { ...allTodos } }
-    })
-  );
-  sessionStorage.setItem('userInfo', JSON.stringify({ ...userInfo, todolist: allTodos }));
   window.location.replace('./');
 };
