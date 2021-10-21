@@ -5,27 +5,21 @@ let todos = [];
 let userInfo = {};
 let allTodos = {};
 
-// DOM Nodes
-
+// DOM Node
 const $loginSuccessSign = document.querySelector('.login-success-sign');
-
 const $yearMonth = document.querySelector('.year-month');
 const $newTodo = document.querySelector('.new-todo');
 const $todoList = document.querySelector('.todo-list');
-
 const $logout = document.querySelector('.logout');
 
-// ---------------------------------------------
-
-const state = {
-  year: new Date().getFullYear(),
-  month: new Date().getMonth()
-};
+// ---------------------------------------------------------------------
 
 const $calendarDate = document.querySelector('.calendar-date');
 
-const convertToRegularMonth = (() => {
-  const monthStr = [
+let [currentYear, currentMonth] = [new Date().getFullYear(), new Date().getMonth()];
+
+const convertMonth = (() => {
+  const monthNames = [
     'JAN',
     'FEB',
     'MAR',
@@ -39,109 +33,111 @@ const convertToRegularMonth = (() => {
     'NOV',
     'DEC'
   ];
-  const monthNum = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+  const monthNums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
   return {
-    makeStr(month) {
-      return monthStr[month];
+    toName(month) {
+      return monthNames[month];
     },
-    makeNum(month) {
-      return monthNum[month];
+    toNum(month) {
+      return monthNums[month];
     }
   };
 })();
 
-const createMonthDate = (
-  () => (length, obj, start) =>
-    Array.from({ length }, () => ({ ...obj, date: start++ }))
-)();
+const createMonthDate = (() => (length, dateObj, startDate) => {
+  let date = startDate;
+  return Array.from({ length }, () => ({ ...dateObj, date: date++ }));
+})();
 
-const render2 = () => {
-  const prevYear = state.year - !state.month;
-  const prevMonth = state.month === 0 ? 11 : state.month - 1;
-  const firstDayOfMonth = new Date(state.year, state.month, 1).getDay();
-  const lastDateMonth = new Date(state.year, state.month + 1, 0).getDate();
+const createCalendarDate = () => {
+  const prevYear = currentYear - !currentMonth;
+  const prevMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+  const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+  const lastDateOfMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
 
-  const nextYear = state.year + +(state.month === 11);
-  const nextMonth = state.month === 11 ? 0 : state.month + 1;
-  const lengthOfNextMonth = 6 - new Date(state.year, state.month + 1, 0).getDay();
+  const nextYear = currentYear + +(currentMonth === 11);
+  const nextMonth = currentMonth === 11 ? 0 : currentMonth + 1;
+  const lengthOfNextMonth = 6 - new Date(currentYear, currentMonth + 1, 0).getDay();
 
   const dateOfPrevMonth = {
     year: prevYear,
-    month: convertToRegularMonth.makeNum(prevMonth),
+    month: convertMonth.toNum(prevMonth),
     current: false
   };
   const dateOfThisMonth = {
-    year: state.year,
-    month: convertToRegularMonth.makeNum(state.month),
+    year: currentYear,
+    month: convertMonth.toNum(currentMonth),
     current: true
   };
   const dateOfNextMonth = {
     year: nextYear,
-    month: convertToRegularMonth.makeNum(nextMonth),
+    month: convertMonth.toNum(nextMonth),
     current: false
   };
-
-  const mergeEachMonth = [
-    ...createMonthDate(firstDayOfMonth, dateOfPrevMonth, lastDateMonth - firstDayOfMonth),
-    ...createMonthDate(lastDateMonth, dateOfThisMonth, 1),
+  return [
+    ...createMonthDate(firstDayOfMonth, dateOfPrevMonth, lastDateOfMonth - firstDayOfMonth),
+    ...createMonthDate(lastDateOfMonth, dateOfThisMonth, 1),
     ...createMonthDate(lengthOfNextMonth, dateOfNextMonth, 1)
   ];
+};
 
-  document.querySelector('.calendar-month').innerHTML = `${convertToRegularMonth.makeStr(
-    state.month
-  )}<span>${state.year}</span>`;
-  $calendarDate.innerHTML = mergeEachMonth
-    .map(
-      ({ year, month, date, current }) =>
-        `<button class="${
-          current ? '' : 'other-month'
-        }"><time datetime="${year}-${month}-${date}">${date}<div class="todo"></div></time></time></button>`
-    )
+const renderCalendar = () => {
+  document.querySelector('.calendar-month').innerHTML = `
+  ${convertMonth.toName(currentMonth)}
+  <span>${currentYear}</span>`;
+
+  $calendarDate.innerHTML = createCalendarDate()
+    .map(({ year, month, date, current }) => {
+      const datetime = `${year}-${month}-${date}`;
+
+      return `
+      <button class="${current ? '' : 'other-month'}">
+      <time datetime="${datetime}">${date}<div class="todo">
+          ${
+            allTodos[datetime]
+              ? `<div class="todo-item">
+                  ${allTodos[datetime][0].content}
+                </div>
+                <div class="todo-item">
+                  ${allTodos[datetime][1] ? allTodos[datetime][1].content : ''}
+                </div>`
+              : ''
+          }
+        </div>
+      </time>
+      </button>`;
+    })
     .join('');
-
-  $calendarDate.querySelectorAll('time').forEach(data => {
-    if (Object.keys(allTodos).includes(data.dateTime)) {
-      data.firstElementChild.innerHTML = `<div class="todo-item">${
-        allTodos[data.dateTime][0].content
-      }</div><div class="todo-item">${
-        allTodos[data.dateTime].length >= 2 ? allTodos[data.dateTime][1].content : ''
-      }</div>`;
-    }
-  });
-};
-
-document.querySelector('.move-prev-months').onclick = () => {
-  if (state.month === 0) {
-    state.month = 11;
-    state.year -= 1;
-  } else state.month -= 1;
-
-  render2();
-};
-
-document.querySelector('.move-next-months').onclick = () => {
-  if (state.month === 11) {
-    state.month = 0;
-    state.year += 1;
-  } else state.month += 1;
-
-  render2();
 };
 
 // Event bindings --------------------------------------
 
+document.querySelector('.move-prev-months').onclick = () => {
+  currentMonth === 0 && (currentYear -= 1);
+  currentMonth = currentMonth === 0 ? 11 : currentMonth - 1;
+
+  renderCalendar();
+};
+
+document.querySelector('.move-next-months').onclick = () => {
+  currentMonth === 11 && (currentYear += 1);
+  currentMonth = currentMonth === 11 ? 0 : currentMonth + 1;
+
+  renderCalendar();
+};
+
+// ------------------------------------------------------------
 window.addEventListener('DOMContentLoaded', () => {
   userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
 
   userKey = sessionStorage.getItem('userKey');
   allTodos = userInfo.todolist;
-
   $loginSuccessSign.textContent = `${userInfo.name}님 안녕하세요`;
-  render2();
+  renderCalendar();
 });
 
-window.onbeforeunload = event => {
+window.addEventListener('beforeunload', event => {
   event.preventDefault();
 
   localStorage.setItem(
@@ -153,7 +149,9 @@ window.onbeforeunload = event => {
   );
   sessionStorage.setItem('userInfo', JSON.stringify({ ...userInfo, todolist: allTodos }));
   event.returnValue = '';
-};
+});
+
+// ---------------------------------------------------------------------------------------------
 
 const $popup = document.querySelector('.popup');
 const $overlay = document.querySelector('.overlay');
@@ -173,7 +171,7 @@ $overlay.onclick = () => {
   $overlay.style.display = 'none';
 
   updateAllTodos(todos);
-  render2();
+  renderCalendar();
 };
 
 const render = () => {
@@ -207,6 +205,8 @@ $calendarDate.onclick = e => {
 
   displayPopup();
 };
+
+// ---------------------------------------------------------------------------------------------
 
 const generateId = () => Math.max(...todos.map(todo => todo.id), 0) + 1;
 
