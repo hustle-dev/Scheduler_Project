@@ -14,13 +14,13 @@ const createToast = (type, title, content) => {
 
 const removeToast = () => {
   const $toast = document.querySelector('.toast');
-  const removeTime = setTimeout(() => {
+  const removeToastTimerId = setTimeout(() => {
     document.body.removeChild($toast);
   }, 3000);
 
   document.querySelector('.toast-close').onclick = () => {
     document.body.removeChild($toast);
-    clearTimeout(removeTime);
+    clearTimeout(removeToastTimerId);
   };
 };
 
