@@ -87,7 +87,10 @@ $signinForm.onsubmit = e => {
   e.preventDefault();
 
   const [{ value: userid }, { value: password }] = e.currentTarget.querySelectorAll('input');
+
+  JSON.parse(localStorage.getItem('users')) || localStorage.setItem('users', '{}');
   const userObj = JSON.parse(localStorage.getItem('users'));
+
   const userKey = hashfunc({ userid, password });
 
   userObj[userKey] ? setUserInfo(userid, password, userObj[userKey]) : guideSignupForm(userid);
