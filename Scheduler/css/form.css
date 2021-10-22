@@ -60,9 +60,7 @@ body {
 
 .input-container {
   position: relative;
-  /* margin-top: 35px;
-  margin-bottom: 35px; */
-  margin: 55px 0 35px;
+  margin: 50px 0 35px;
 }
 
 .input-container label {
@@ -92,7 +90,6 @@ body {
   left: 0.4rem;
   line-height: 60px;
   cursor: pointer;
-  /* transition: var(--trasition-delay) ease; */
 }
 
 .input-container .bar {
