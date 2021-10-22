@@ -1,3 +1,5 @@
+import { convertMonth, createCalendarDate } from './helper.js';
+
 let userKey = '';
 let userInfo = {};
 let userTodos = {};
@@ -14,76 +16,13 @@ const $newTodo = document.querySelector('.new-todo');
 const $todoList = document.querySelector('.todo-list');
 const $overlay = document.querySelector('.overlay');
 
-const convertMonth = (() => {
-  const monthNames = [
-    'JAN',
-    'FEB',
-    'MAR',
-    'APR',
-    'MAY',
-    'JUN',
-    'JUL',
-    'AUG',
-    'SEP',
-    'OCT',
-    'NOV',
-    'DEC'
-  ];
-  const monthNums = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-
-  return {
-    toName(month) {
-      return monthNames[month];
-    },
-    toNum(month) {
-      return monthNums[month];
-    }
-  };
-})();
-
-const createMonthDate = (() => (length, dateObj, startDate) => {
-  let date = startDate;
-  return Array.from({ length }, () => ({ ...dateObj, date: date++ }));
-})();
-
-const createCalendarDate = () => {
-  const prevYear = currentYear - !currentMonth;
-  const prevMonth = currentMonth === 0 ? 11 : currentMonth - 1;
-  const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
-  const lastDateOfMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-
-  const nextYear = currentYear + +(currentMonth === 11);
-  const nextMonth = currentMonth === 11 ? 0 : currentMonth + 1;
-  const lengthOfNextMonth = 6 - new Date(currentYear, currentMonth + 1, 0).getDay();
-
-  const dateOfPrevMonth = {
-    year: prevYear,
-    month: convertMonth.toNum(prevMonth),
-    current: false
-  };
-  const dateOfThisMonth = {
-    year: currentYear,
-    month: convertMonth.toNum(currentMonth),
-    current: true
-  };
-  const dateOfNextMonth = {
-    year: nextYear,
-    month: convertMonth.toNum(nextMonth),
-    current: false
-  };
-  return [
-    ...createMonthDate(firstDayOfMonth, dateOfPrevMonth, lastDateOfMonth - firstDayOfMonth),
-    ...createMonthDate(lastDateOfMonth, dateOfThisMonth, 1),
-    ...createMonthDate(lengthOfNextMonth, dateOfNextMonth, 1)
-  ];
-};
-
+/** render function */
 const renderCalendar = () => {
   document.querySelector('.calendar-month').innerHTML = `
   ${convertMonth.toName(currentMonth)}
   <span>${currentYear}</span>`;
 
-  $calendarDate.innerHTML = createCalendarDate()
+  $calendarDate.innerHTML = createCalendarDate(currentYear, currentMonth)
     .map(({ year, month, date, current }) => {
       const datetime = `${year}-${month}-${date}`;
 
@@ -107,17 +46,6 @@ const renderCalendar = () => {
     .join('');
 };
 
-const displayTodoList = bool => {
-  $popup.style.display = bool ? 'initial' : 'none';
-  $overlay.style.display = bool ? 'initial' : 'none';
-};
-
-const updateUserTodos = () => {
-  todayTodos.length === 0
-    ? delete userTodos[`${$yearMonth.textContent}`]
-    : (userTodos[`${$yearMonth.textContent}`] = todayTodos);
-};
-
 const renderTodoList = () => {
   $todoList.innerHTML = todayTodos
     .map(
@@ -133,47 +61,70 @@ const renderTodoList = () => {
     .join('');
 };
 
+/**
+ * Replace newTodo with todayTodos and render.
+ * @param {Array} newTodo
+ */
 const setTodo = newTodo => {
   todayTodos = newTodo;
   renderTodoList();
 };
 
+/**
+ * generate id
+ * @returns {number} ID
+ */
 const generateId = () => Math.max(...todayTodos.map(todo => todo.id), 0) + 1;
 
+/**
+ * replace content by new content
+ * @param {string} content : new content;
+ */
 const addTodo = content => {
   setTodo([{ id: generateId(), content, completed: false }, ...todayTodos]);
 };
 
+/**
+ * toggle todo completed by id
+ * @param {string} id
+ */
 const toggleTodoCompleted = id => {
   setTodo(
     todayTodos.map(todo => (todo.id === +id ? { ...todo, completed: !todo.completed } : todo))
   );
 };
 
+/**
+ * remove todo by id
+ * @param {string} id
+ */
 const removeTodo = id => {
   setTodo(todayTodos.filter(todo => todo.id !== +id));
 };
 
+/**
+ * Determine display based on boolean value.
+ * @param {boolean} bool
+ */
+const displayTodoList = bool => {
+  $popup.style.display = bool ? 'initial' : 'none';
+  $overlay.style.display = bool ? 'initial' : 'none';
+};
+
+/** update user todos */
+const updateUserTodos = () => {
+  todayTodos.length === 0
+    ? delete userTodos[`${$yearMonth.textContent}`]
+    : (userTodos[`${$yearMonth.textContent}`] = todayTodos);
+};
+
+// Event binding
 window.addEventListener('DOMContentLoaded', () => {
   userKey = sessionStorage.getItem('userKey');
   userInfo = JSON.parse(sessionStorage.getItem('userInfo'));
   userTodos = userInfo.todolist;
   document.querySelector('.login-success-sign').textContent = `${userInfo.name}님 안녕하세요`;
   renderCalendar();
-});
-
-window.addEventListener('beforeunload', e => {
-  e.preventDefault();
-
-  localStorage.setItem(
-    'users',
-    JSON.stringify({
-      ...JSON.parse(localStorage.getItem('users')),
-      [userKey]: { ...userInfo, todolist: { ...userTodos } }
-    })
-  );
-  sessionStorage.setItem('userInfo', JSON.stringify({ ...userInfo, todolist: userTodos }));
-  e.returnValue = '';
 });
 
 document.querySelector('.move-prev-months').onclick = () => {
@@ -228,3 +179,17 @@ $todoList.onclick = e => {
 $logout.onclick = () => {
   window.location.replace('./');
 };
+
+window.addEventListener('beforeunload', e => {
+  e.preventDefault();
+
+  localStorage.setItem(
+    'users',
+    JSON.stringify({
+      ...JSON.parse(localStorage.getItem('users')),
+      [userKey]: { ...userInfo, todolist: { ...userTodos } }
+    })
+  );
+  sessionStorage.setItem('userInfo', JSON.stringify({ ...userInfo, todolist: userTodos }));
+  e.returnValue = '';
+});
