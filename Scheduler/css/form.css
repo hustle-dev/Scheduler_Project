@@ -1,4 +1,5 @@
 @import 'common.css';
+@import 'toast.css';
 
 :root {
   --background-color: #fff;

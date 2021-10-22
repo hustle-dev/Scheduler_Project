@@ -17,6 +17,8 @@ const $signupUserid = document.getElementById('signup-userid');
 const $signupConfirmPasswordInput = document.getElementById('signup-confirm-password');
 
 // Event handler
+
+/** switch signin form & signup form */
 const switchForm = () => {
   [$signinForm, $signupForm].forEach($form => $form.classList.toggle('hidden'));
 };
@@ -42,6 +44,10 @@ const notifyStatusByValidation = ($target, verifyObj) => {
     : ERROR_MESSAGES[prop];
 };
 
+/**
+ * Check the password and renew the regular expression of the confirm-password.
+ * @param {Element} $target
+ */
 const trackConfirmPasswordValidation = $target => {
   if ($target.getAttribute('name') !== 'password') return;
 
@@ -51,6 +57,12 @@ const trackConfirmPasswordValidation = $target => {
     notifyStatusByValidation($signupConfirmPasswordInput, signupValidation);
 };
 
+/**
+ * set user information in session storage
+ * @param {string} userid
+ * @param {string} password
+ * @param {object} userInfo
+ */
 const setUserInfo = (userid, password, userInfo) => {
   sessionStorage.setItem('userKey', hashfunc({ userid, password }));
   sessionStorage.setItem('userInfo', JSON.stringify(userInfo));
@@ -58,6 +70,10 @@ const setUserInfo = (userid, password, userInfo) => {
   window.location.replace('./calendar.html');
 };
 
+/**
+ * if you fail to log in, you will be guided to sign up
+ * @param {string} userid
+ */
 const guideSignupForm = userid => {
   createToast('fail', toastTitle.signinFail, userid + toastContent.signinFail);
 
